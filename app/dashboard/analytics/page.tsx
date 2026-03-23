@@ -31,14 +31,12 @@ export default async function AnalyticsPage() {
   });
 
   const analytics = buildAnalytics(
-    salesEntries.map(
-      (entry: (typeof salesEntries)[number]) => ({
-        date: entry.date,
-        hour: entry.hour,
-        revenue: Number(entry.revenue),
-        transactions: entry.transactions,
-      }),
-    ),
+    salesEntries.map((entry: (typeof salesEntries)[number]) => ({
+      date: entry.date,
+      hour: entry.hour,
+      revenue: Number(entry.revenue),
+      transactions: entry.transactions,
+    })),
   );
 
   return (
