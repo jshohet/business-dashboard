@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Store {
+  id            String                 @id @default(cuid())
+  name          String
+  timezone      String                 @default("UTC")
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  users         User[]
+  employees     Employee[]
+  salesEntries  SalesEntry[]
+  inventoryLogs InventoryLog[]
+  laborEntries  LaborEntry[]
+
+  @@index([name])
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  storeId      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  store        Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId])
+}
+
+model Employee {
+  id            String                 @id @default(cuid())
+  storeId       String
+  name          String
+  role          String
+  hourlyRate    Decimal                @db.Decimal(10, 2)
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  store         Store                  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  availability  EmployeeAvailability[]
+
+  @@index([storeId])
+}
+
+model EmployeeAvailability {
+  id         String   @id @default(cuid())
+  employeeId String
+  date       DateTime
+  startHour  Int
+  endHour    Int
+  createdAt  DateTime @default(now())
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId, date])
+}
+
+model SalesEntry {
+  id           String   @id @default(cuid())
+  storeId      String
+  date         DateTime
+  hour         Int
+  revenue      Decimal  @db.Decimal(12, 2)
+  transactions Int      @default(0)
+  createdAt    DateTime @default(now())
+  store        Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId, date])
+  @@index([storeId, hour])
+}
+
+model InventoryLog {
+  id         String   @id @default(cuid())
+  storeId    String
+  product    String
+  date       DateTime
+  orderedQty Int
+  soldQty    Int
+  wasteQty   Int      @default(0)
+  createdAt  DateTime @default(now())
+  store      Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId, date])
+  @@index([storeId, product])
+}
+
+model LaborEntry {
+  id        String   @id @default(cuid())
+  storeId   String
+  date      DateTime
+  laborCost Decimal  @db.Decimal(12, 2)
+  notes     String?
+  createdAt DateTime @default(now())
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+
+  @@index([storeId, date])
+}

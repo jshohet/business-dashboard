@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Business Dashboard
 
-## Getting Started
+Operational dashboard for retail/food stores with store-isolated data.
 
-First, run the development server:
+Stack:
+
+- Next.js (App Router) + React + Tailwind CSS
+- Prisma + PostgreSQL
+- Auth.js (NextAuth v5 beta, credentials auth)
+
+## Implemented So Far (Phase 1 through Phase 5)
+
+- Authentication:
+  - Sign up with store creation
+  - Sign in with credentials
+  - Protected dashboard routes
+- Basic dashboard UI:
+  - Overview cards (revenue, sales entries, employees)
+- Manual data entry:
+  - Sales entry form
+  - Employee form
+  - Employee availability form
+- Analytics:
+  - Daily revenue trend chart
+  - Weekly revenue chart
+  - Peak hour detection from sales distribution
+  - 7-day trend analysis vs previous 7 days
+- Smart Scheduling:
+  - Demand-based staffing requirement per hour
+  - Weekly shift suggestions for next 7 days
+  - Availability-aware assignment (max 8h/day and 40h/week)
+  - Coverage gap detection for understaffed slots
+- Inventory Forecasting:
+  - Product-level inventory logging (ordered, sold, waste)
+  - Day-of-week demand forecast for next 7 days
+  - Recommended order quantity per product/day
+- Waste + Efficiency Tracking:
+  - Waste percentage overall and by product
+  - Labor cost vs revenue tracking
+  - Auto-generated alerts (overstaffing patterns and high waste products)
+- Multi-tenant data model:
+  - Each user belongs to one store
+  - Queries are scoped by store
+- Phase 5 polish:
+  - Improved dashboard shell responsiveness and mobile nav behavior
+  - Feature shortcut cards on overview page
+  - Demo data seeding pipeline
+  - Deployment checklist and production env template
+
+## Project Structure
+
+- `app/(auth)/login` and `app/(auth)/signup`: auth screens
+- `app/dashboard`: protected dashboard pages
+- `app/dashboard/actions.ts`: server actions for manual data entry
+- `auth.ts`: Auth.js config and callbacks
+- `proxy.ts`: route protection matcher
+- `prisma/schema.prisma`: data model
+- `lib/prisma.ts`: Prisma client singleton
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create environment file:
+
+```bash
+copy .env.example .env
+```
+
+3. Set `DATABASE_URL` in `.env` to your PostgreSQL database.
+
+4. Run migrations:
+
+```bash
+npm run prisma:migrate -- --name init
+```
+
+5. Generate Prisma client:
+
+```bash
+npm run prisma:generate
+```
+
+6. Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Seed Demo Data
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run:
 
-## Learn More
+```bash
+npm run prisma:seed
+```
 
-To learn more about Next.js, take a look at the following resources:
+Demo account created:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Email: demo@storepilot.app
+- Password: DemoPass123!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Validation Commands
 
-## Deploy on Vercel
+```bash
+npm run lint
+npm run build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for Vercel setup, env vars, and post-deploy checks.
