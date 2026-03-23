@@ -51,18 +51,18 @@ export default async function EfficiencyPage() {
   ]);
 
   const insights = buildEfficiencyInsights(
-    inventoryRows.map((row) => ({
+    inventoryRows.map((row: (typeof inventoryRows)[number]) => ({
       product: row.product,
       date: row.date,
       orderedQty: row.orderedQty,
       soldQty: row.soldQty,
       wasteQty: row.wasteQty,
     })),
-    laborRows.map((row) => ({
+    laborRows.map((row: (typeof laborRows)[number]) => ({
       date: row.date,
       laborCost: Number(row.laborCost),
     })),
-    salesRows.map((row) => ({
+    salesRows.map((row: (typeof salesRows)[number]) => ({
       date: row.date,
       revenue: Number(row.revenue),
     })),
