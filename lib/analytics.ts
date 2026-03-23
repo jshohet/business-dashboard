@@ -7,6 +7,8 @@ type SalesPoint = {
   transactions: number;
 };
 
+export type AnalyticsSalesPoint = SalesPoint;
+
 export type RevenuePoint = {
   label: string;
   revenue: number;

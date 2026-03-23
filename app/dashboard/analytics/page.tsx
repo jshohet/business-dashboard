@@ -1,4 +1,5 @@
 import { subDays } from "date-fns";
+import { Prisma } from "@prisma/client";
 import AnalyticsCharts from "./charts";
 import { auth } from "@/auth";
 import { buildAnalytics } from "@/lib/analytics";
@@ -31,12 +32,19 @@ export default async function AnalyticsPage() {
   });
 
   const analytics = buildAnalytics(
-    salesEntries.map((entry) => ({
-      date: entry.date,
-      hour: entry.hour,
-      revenue: Number(entry.revenue),
-      transactions: entry.transactions,
-    })),
+    salesEntries.map(
+      (entry: {
+        date: Date;
+        hour: number;
+        revenue: Prisma.Decimal;
+        transactions: number;
+      }) => ({
+        date: entry.date,
+        hour: entry.hour,
+        revenue: Number(entry.revenue),
+        transactions: entry.transactions,
+      }),
+    ),
   );
 
   return (
