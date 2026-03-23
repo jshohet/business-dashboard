@@ -35,14 +35,16 @@ export default async function InventoryPage() {
     new Date(),
   );
 
-  const recentLogs = inventoryRows.slice(0, 25).map((row: (typeof inventoryRows)[number]) => ({
-    id: row.id,
-    date: row.date.toISOString().slice(0, 10),
-    product: row.product,
-    orderedQty: row.orderedQty,
-    soldQty: row.soldQty,
-    wasteQty: row.wasteQty,
-  }));
+  const recentLogs = inventoryRows
+    .slice(0, 25)
+    .map((row: (typeof inventoryRows)[number]) => ({
+      id: row.id,
+      date: row.date.toISOString().slice(0, 10),
+      product: row.product,
+      orderedQty: row.orderedQty,
+      soldQty: row.soldQty,
+      wasteQty: row.wasteQty,
+    }));
 
   return (
     <div className="space-y-6">

@@ -30,20 +30,24 @@ export default async function EmployeesPage() {
     }),
   ]);
 
-  const employeeOptions = employees.map((employee: (typeof employees)[number]) => ({
-    id: employee.id,
-    name: employee.name,
-    role: employee.role,
-    hourlyRate: Number(employee.hourlyRate),
-  }));
+  const employeeOptions = employees.map(
+    (employee: (typeof employees)[number]) => ({
+      id: employee.id,
+      name: employee.name,
+      role: employee.role,
+      hourlyRate: Number(employee.hourlyRate),
+    }),
+  );
 
-  const availabilityRows = availability.map((item: (typeof availability)[number]) => ({
-    id: item.id,
-    employeeName: item.employee.name,
-    date: item.date.toISOString().slice(0, 10),
-    startHour: item.startHour,
-    endHour: item.endHour,
-  }));
+  const availabilityRows = availability.map(
+    (item: (typeof availability)[number]) => ({
+      id: item.id,
+      employeeName: item.employee.name,
+      date: item.date.toISOString().slice(0, 10),
+      startHour: item.startHour,
+      endHour: item.endHour,
+    }),
+  );
 
   return (
     <div className="space-y-6">
