@@ -30,14 +30,14 @@ export default async function EmployeesPage() {
     }),
   ]);
 
-  const employeeOptions = employees.map((employee) => ({
+  const employeeOptions = employees.map((employee: (typeof employees)[number]) => ({
     id: employee.id,
     name: employee.name,
     role: employee.role,
     hourlyRate: Number(employee.hourlyRate),
   }));
 
-  const availabilityRows = availability.map((item) => ({
+  const availabilityRows = availability.map((item: (typeof availability)[number]) => ({
     id: item.id,
     employeeName: item.employee.name,
     date: item.date.toISOString().slice(0, 10),

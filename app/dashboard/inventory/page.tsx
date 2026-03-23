@@ -24,7 +24,7 @@ export default async function InventoryPage() {
   });
 
   const forecastRows = buildInventoryForecast(
-    inventoryRows.map((row) => ({
+    inventoryRows.map((row: (typeof inventoryRows)[number]) => ({
       product: row.product,
       date: row.date,
       orderedQty: row.orderedQty,
@@ -35,7 +35,7 @@ export default async function InventoryPage() {
     new Date(),
   );
 
-  const recentLogs = inventoryRows.slice(0, 25).map((row) => ({
+  const recentLogs = inventoryRows.slice(0, 25).map((row: (typeof inventoryRows)[number]) => ({
     id: row.id,
     date: row.date.toISOString().slice(0, 10),
     product: row.product,

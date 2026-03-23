@@ -59,7 +59,7 @@ export default async function SchedulingPage() {
   const schedule = generateWeeklySchedule(
     employees,
     availabilityRows,
-    salesRows.map((row) => ({
+    salesRows.map((row: (typeof salesRows)[number]) => ({
       date: row.date,
       hour: row.hour,
       revenue: Number(row.revenue),
