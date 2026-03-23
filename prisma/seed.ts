@@ -1,8 +1,23 @@
+import "dotenv/config";
+import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { addDays, subDays } from "date-fns";
 import { PrismaClient } from "@prisma/client";
+import { Pool } from "pg";
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL is required to run the seed script.");
+}
+
+const pool = new Pool({
+  connectionString,
+});
+
+const prisma = new PrismaClient({
+  adapter: new PrismaPg(pool),
+});
 
 function seededRevenue(dayOffset: number, hour: number) {
   const dayWave = 1 + Math.sin(dayOffset / 3) * 0.18;
@@ -22,64 +37,82 @@ async function main() {
   const existing = await prisma.user.findUnique({
     where: { email: demoEmail },
   });
+  let storeId = existing?.storeId;
 
-  if (existing) {
-    console.log("Demo data already exists. Skipping seed.");
-    return;
+  if (!storeId) {
+    const passwordHash = await bcrypt.hash("DemoPass123!", 10);
+
+    const store = await prisma.store.create({
+      data: {
+        name: "Downtown Store",
+        timezone: "America/New_York",
+      },
+    });
+
+    await prisma.user.create({
+      data: {
+        email: demoEmail,
+        name: "Demo Owner",
+        passwordHash,
+        storeId: store.id,
+      },
+    });
+
+    storeId = store.id;
   }
 
-  const passwordHash = await bcrypt.hash("DemoPass123!", 10);
-
-  const store = await prisma.store.create({
-    data: {
-      name: "Downtown Store",
-      timezone: "America/New_York",
-    },
+  const existingEmployees = await prisma.employee.findMany({
+    where: { storeId },
+    orderBy: { createdAt: "asc" },
   });
 
-  await prisma.user.create({
-    data: {
-      email: demoEmail,
-      name: "Demo Owner",
-      passwordHash,
-      storeId: store.id,
-    },
-  });
+  const employees =
+    existingEmployees.length >= 4
+      ? existingEmployees
+      : await prisma.$transaction([
+          prisma.employee.create({
+            data: {
+              storeId,
+              name: "Ava Brooks",
+              role: "Shift Lead",
+              hourlyRate: 24.5,
+            },
+          }),
+          prisma.employee.create({
+            data: {
+              storeId,
+              name: "Noah Kim",
+              role: "Barista",
+              hourlyRate: 19.25,
+            },
+          }),
+          prisma.employee.create({
+            data: {
+              storeId,
+              name: "Mia Patel",
+              role: "Cashier",
+              hourlyRate: 18.5,
+            },
+          }),
+          prisma.employee.create({
+            data: {
+              storeId,
+              name: "Liam Chen",
+              role: "Barista",
+              hourlyRate: 19.0,
+            },
+          }),
+        ]);
 
-  const employees = await prisma.$transaction([
-    prisma.employee.create({
-      data: {
-        storeId: store.id,
-        name: "Ava Brooks",
-        role: "Shift Lead",
-        hourlyRate: 24.5,
-      },
-    }),
-    prisma.employee.create({
-      data: {
-        storeId: store.id,
-        name: "Noah Kim",
-        role: "Barista",
-        hourlyRate: 19.25,
-      },
-    }),
-    prisma.employee.create({
-      data: {
-        storeId: store.id,
-        name: "Mia Patel",
-        role: "Cashier",
-        hourlyRate: 18.5,
-      },
-    }),
-    prisma.employee.create({
-      data: {
-        storeId: store.id,
-        name: "Liam Chen",
-        role: "Barista",
-        hourlyRate: 19.0,
-      },
-    }),
-  ]);
+  const [salesCount, inventoryCount, laborCount, availabilityCount] =
+    await Promise.all([
+      prisma.salesEntry.count({ where: { storeId } }),
+      prisma.inventoryLog.count({ where: { storeId } }),
+      prisma.laborEntry.count({ where: { storeId } }),
+      prisma.employeeAvailability.count({
+        where: { employee: { storeId } },
+      }),
+    ]);
 
   const salesCreates = [];
   for (let dayOffset = 35; dayOffset >= 0; dayOffset -= 1) {
@@ -87,17 +120,13 @@ async function main() {
     for (let hour = 7; hour <= 20; hour += 1) {
       const revenue = seededRevenue(dayOffset, hour);
       const transactions = Math.max(2, Math.round(revenue / 8));
-      salesCreates.push(
-        prisma.salesEntry.create({
-          data: {
-            storeId: store.id,
-            date,
-            hour,
-            revenue,
-            transactions,
-          },
-        }),
-      );
+      salesCreates.push({
+        storeId,
+        date,
+        hour,
+        revenue,
+        transactions,
+      });
     }
   }
 
@@ -116,18 +145,14 @@ async function main() {
           : Math.max(1, Math.round(soldQty * 0.06));
       const orderedQty = soldQty + wasteQty + 4;
 
-      inventoryCreates.push(
-        prisma.inventoryLog.create({
-          data: {
-            storeId: store.id,
-            product,
-            date,
-            orderedQty,
-            soldQty,
-            wasteQty,
-          },
-        }),
-      );
+      inventoryCreates.push({
+        storeId,
+        product,
+        date,
+        orderedQty,
+        soldQty,
+        wasteQty,
+      });
     }
   }
 
@@ -137,63 +162,60 @@ async function main() {
     const weekday = date.getDay();
     const laborCost =
       weekday === 2 ? 640 : weekday === 5 || weekday === 6 ? 720 : 570;
-    laborCreates.push(
-      prisma.laborEntry.create({
-        data: {
-          storeId: store.id,
-          date,
-          laborCost,
-          notes: weekday === 2 ? "Potential overstaffing day" : null,
-        },
-      }),
-    );
+    laborCreates.push({
+      storeId,
+      date,
+      laborCost,
+      notes: weekday === 2 ? "Potential overstaffing day" : null,
+    });
   }
 
   const availabilityCreates = [];
   for (let i = 0; i < 7; i += 1) {
     const date = addDays(new Date(), i);
     availabilityCreates.push(
-      prisma.employeeAvailability.create({
-        data: {
-          employeeId: employees[0].id,
-          date,
-          startHour: 7,
-          endHour: 15,
-        },
-      }),
-      prisma.employeeAvailability.create({
-        data: {
-          employeeId: employees[1].id,
-          date,
-          startHour: 8,
-          endHour: 16,
-        },
-      }),
-      prisma.employeeAvailability.create({
-        data: {
-          employeeId: employees[2].id,
-          date,
-          startHour: 10,
-          endHour: 18,
-        },
-      }),
-      prisma.employeeAvailability.create({
-        data: {
-          employeeId: employees[3].id,
-          date,
-          startHour: 12,
-          endHour: 20,
-        },
-      }),
+      {
+        employeeId: employees[0].id,
+        date,
+        startHour: 7,
+        endHour: 15,
+      },
+      {
+        employeeId: employees[1].id,
+        date,
+        startHour: 8,
+        endHour: 16,
+      },
+      {
+        employeeId: employees[2].id,
+        date,
+        startHour: 10,
+        endHour: 18,
+      },
+      {
+        employeeId: employees[3].id,
+        date,
+        startHour: 12,
+        endHour: 20,
+      },
     );
   }
 
-  await prisma.$transaction([
-    ...salesCreates,
-    ...inventoryCreates,
-    ...laborCreates,
-    ...availabilityCreates,
-  ]);
+  if (salesCount === 0) {
+    await prisma.salesEntry.createMany({ data: salesCreates });
+  }
+
+  if (inventoryCount === 0) {
+    await prisma.inventoryLog.createMany({ data: inventoryCreates });
+  }
+
+  if (laborCount === 0) {
+    await prisma.laborEntry.createMany({ data: laborCreates });
+  }
+
+  if (availabilityCount === 0) {
+    await prisma.employeeAvailability.createMany({ data: availabilityCreates });
+  }
 
   console.log("Seed complete.");
   console.log("Demo login: demo@storepilot.app / DemoPass123!");
@@ -206,4 +228,5 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    await pool.end();
   });
