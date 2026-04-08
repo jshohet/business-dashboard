@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Business Dashboard favicon">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fb923c" />
+      <stop offset="1" stop-color="#ea580c" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#bg)" />
+  <path d="M18 44h28" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0.95" />
+  <rect x="18" y="32" width="6" height="12" rx="2" fill="#fff" />
+  <rect x="29" y="24" width="6" height="20" rx="2" fill="#fff" opacity="0.95" />
+  <rect x="40" y="18" width="6" height="26" rx="2" fill="#fff" opacity="0.9" />
+  <path d="M18 24l9-6 8 5 11-9" fill="none" stroke="#fff7ed" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="18" cy="24" r="2.5" fill="#fff7ed" />
+  <circle cx="27" cy="18" r="2.5" fill="#fff7ed" />
+  <circle cx="35" cy="23" r="2.5" fill="#fff7ed" />
+  <circle cx="46" cy="14" r="2.5" fill="#fff7ed" />
+</svg>
