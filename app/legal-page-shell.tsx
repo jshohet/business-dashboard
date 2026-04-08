@@ -24,7 +24,9 @@ export function LegalPageShell({
           </p>
         </header>
 
-        <div className="mt-8 space-y-6 leading-7 text-slate-700">{children}</div>
+        <div className="mt-8 space-y-6 leading-7 text-slate-700">
+          {children}
+        </div>
       </div>
     </section>
   );

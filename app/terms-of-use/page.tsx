@@ -9,8 +9,7 @@ import {
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description:
-    "Basic terms governing access to and use of Business Dashboard.",
+  description: "Basic terms governing access to and use of Business Dashboard.",
 };
 
 export default function TermsOfUsePage() {
@@ -21,8 +20,8 @@ export default function TermsOfUsePage() {
       <div>
         <h2 className="text-xl font-bold text-slate-900">Operator</h2>
         <p>
-          These terms apply to the use of Business Dashboard, operated by
-          {" "}{legalOperatorName}.
+          These terms apply to the use of Business Dashboard, operated by{" "}
+          {legalOperatorName}.
         </p>
       </div>
 
@@ -71,13 +70,13 @@ export default function TermsOfUsePage() {
         </h2>
         <p>
           Requests relating to personal data, account access, correction, or
-          deletion should be submitted through the {" "}
+          deletion should be submitted through the{" "}
           <Link
             href="/contact-data-requests"
             className="font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900">
             Contact & Data Requests
           </Link>{" "}
-          page or by email to {" "}
+          page or by email to{" "}
           <a
             href={`mailto:${legalContactEmail}`}
             className="font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900">

@@ -27,7 +27,7 @@ export default function ContactDataRequestsPage() {
           How to make a request
         </h2>
         <p>
-          Send legal, privacy, access, correction, or deletion requests to {" "}
+          Send legal, privacy, access, correction, or deletion requests to{" "}
           <a
             href={`mailto:${legalContactEmail}`}
             className="font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900">
@@ -74,11 +74,13 @@ export default function ContactDataRequestsPage() {
       </div>
 
       <div>
-        <h2 className="text-xl font-bold text-slate-900">Jurisdiction status</h2>
+        <h2 className="text-xl font-bold text-slate-900">
+          Jurisdiction status
+        </h2>
         <p>
           Requests and related site policies are handled with reference to the
-          laws of the {legalJurisdiction}, except where mandatory law requires
-          a different standard to apply.
+          laws of the {legalJurisdiction}, except where mandatory law requires a
+          different standard to apply.
         </p>
       </div>
     </LegalPageShell>

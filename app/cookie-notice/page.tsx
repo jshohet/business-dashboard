@@ -49,13 +49,13 @@ export default function CookieNoticePage() {
         </h2>
         <p>
           If you have questions about authentication cookies or want to make a
-          privacy-related request, use the {" "}
+          privacy-related request, use the{" "}
           <Link
             href="/contact-data-requests"
             className="font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900">
             Contact & Data Requests
           </Link>{" "}
-          page or email {" "}
+          page or email{" "}
           <a
             href={`mailto:${legalContactEmail}`}
             className="font-semibold text-orange-700 underline decoration-orange-300 underline-offset-4 hover:text-orange-900">
