@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { legalFooterLinks, legalOperatorName } from "@/lib/legal";
 import { getSiteUrl, isProductionDeployment } from "@/lib/site";
 import "./globals.css";
 
@@ -78,8 +80,23 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-screen flex flex-col">
         <div className="flex-1">{children}</div>
-        <footer className="border-t border-slate-200 bg-white/90 px-4 py-4 text-center text-sm text-slate-600 backdrop-blur sm:px-6">
-          <p>{`© ${currentYear} JOsef Shohet`}</p>
+        <footer className="border-t border-slate-200 bg-white/90 px-4 py-6 text-sm text-slate-600 backdrop-blur sm:px-6">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-center md:flex-row md:text-left">
+            <p>{`Copyright ${currentYear} ${legalOperatorName}`}</p>
+            <nav aria-label="Legal links">
+              <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+                {legalFooterLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="underline decoration-slate-300 underline-offset-4 transition hover:text-slate-900 hover:decoration-slate-500">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
         </footer>
       </body>
     </html>
