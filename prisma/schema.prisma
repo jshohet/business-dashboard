@@ -109,3 +109,10 @@ model LaborEntry {
 
   @@index([storeId, date])
 }
+
+model FeatureSuggestion {
+  id        String   @id @default(cuid())
+  email     String?
+  message   String
+  createdAt DateTime @default(now())
+}

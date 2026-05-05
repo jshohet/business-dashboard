@@ -22,7 +22,6 @@ export default function SignupPage() {
         overflow: "hidden",
       }}>
 
-      {/* Background glow */}
       <div aria-hidden style={{
         position: "absolute", top: "-15%", right: "5%",
         width: 500, height: 500, borderRadius: "50%",
@@ -42,10 +41,9 @@ export default function SignupPage() {
         }}
         className="anim-fade-up">
 
-        {/* Header */}
         <div style={{ marginBottom: "2rem" }}>
-          <Link href="/login" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
-            ← Back to sign in
+          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
+            ← Back
           </Link>
           <div style={{
             width: 38, height: 38, borderRadius: 10, background: "var(--amber)",
@@ -60,7 +58,7 @@ export default function SignupPage() {
             Create your store
           </h1>
           <p style={{ marginTop: "0.4rem", color: "var(--text-3)", fontSize: "0.82rem" }}>
-            Your own isolated workspace — private data, full control.
+            You&apos;ll see example data right away. Subscribe to start entering your own.
           </p>
         </div>
 
@@ -70,26 +68,14 @@ export default function SignupPage() {
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 YOUR NAME
               </span>
-              <input
-                name="name"
-                type="text"
-                required
-                className="inp"
-                placeholder="Alex"
-              />
+              <input name="name" type="text" required className="inp" placeholder="Alex" />
             </label>
 
             <label style={{ display: "block" }}>
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 STORE NAME
               </span>
-              <input
-                name="storeName"
-                type="text"
-                required
-                className="inp"
-                placeholder="Downtown Café"
-              />
+              <input name="storeName" type="text" required className="inp" placeholder="Downtown Café" />
             </label>
           </div>
 
@@ -97,27 +83,14 @@ export default function SignupPage() {
             <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
               EMAIL
             </span>
-            <input
-              name="email"
-              type="email"
-              required
-              className="inp"
-              placeholder="you@store.com"
-            />
+            <input name="email" type="email" required className="inp" placeholder="you@store.com" />
           </label>
 
           <label style={{ display: "block" }}>
             <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
               PASSWORD
             </span>
-            <input
-              name="password"
-              type="password"
-              required
-              minLength={8}
-              className="inp"
-              placeholder="At least 8 characters"
-            />
+            <input name="password" type="password" required minLength={8} className="inp" placeholder="At least 8 characters" />
           </label>
 
           {error ? <p className="alert-error">{error}</p> : null}
@@ -127,7 +100,7 @@ export default function SignupPage() {
             disabled={isPending}
             className="btn-primary"
             style={{ marginTop: "0.25rem", width: "100%", padding: "0.85rem" }}>
-            {isPending ? "Creating account…" : "Create account →"}
+            {isPending ? "Setting up your store…" : "Create account →"}
           </button>
         </form>
 
@@ -136,10 +109,6 @@ export default function SignupPage() {
           <Link href="/login" style={{ color: "var(--amber)", fontWeight: 600, textDecoration: "none" }}>
             Sign in
           </Link>
-        </p>
-
-        <p style={{ marginTop: "1rem", fontSize: "0.72rem", color: "var(--text-3)", textAlign: "center", lineHeight: 1.5 }}>
-          After signup, subscribe for $5/month to unlock all features.
         </p>
       </div>
     </main>

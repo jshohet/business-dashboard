@@ -2,10 +2,10 @@
 
 import bcrypt from "bcryptjs";
 import AuthError from "next-auth";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { seedDemoData } from "@/lib/seed-demo-data";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -44,7 +44,7 @@ export async function signupAction(
 
   const passwordHash = await bcrypt.hash(parsed.data.password, 10);
 
-  await prisma.store.create({
+  const store = await prisma.store.create({
     data: {
       name: parsed.data.storeName,
       users: {
@@ -57,7 +57,19 @@ export async function signupAction(
     },
   });
 
-  redirect("/login?created=1");
+  await seedDemoData(store.id);
+
+  try {
+    await signIn("credentials", {
+      email: parsed.data.email,
+      password: parsed.data.password,
+      redirectTo: "/dashboard",
+    });
+  } catch (err) {
+    throw err;
+  }
+
+  return null;
 }
 
 export async function loginAction(

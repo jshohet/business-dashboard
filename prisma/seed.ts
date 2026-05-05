@@ -33,7 +33,7 @@ function seededRevenue(dayOffset: number, hour: number) {
 }
 
 async function main() {
-  const demoEmail = "demo@storepilot.app";
+  const demoEmail = "demo@storeops.tech";
   const existing = await prisma.user.findUnique({
     where: { email: demoEmail },
   });
@@ -218,7 +218,7 @@ async function main() {
   }
 
   console.log("Seed complete.");
-  console.log("Demo login: demo@storepilot.app / DemoPass123!");
+  console.log("Demo login: demo@storeops.tech / DemoPass123!");
 }
 
 main()

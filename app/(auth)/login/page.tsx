@@ -24,18 +24,14 @@ export default function LoginPage() {
           overflow: "hidden",
         }}>
 
-        {/* Background geometry */}
         <div aria-hidden style={{
           position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none",
         }}>
-          {/* Amber glow orb */}
           <div style={{
             position: "absolute", top: "30%", left: "-10%",
-            width: 420, height: 420,
-            borderRadius: "50%",
+            width: 420, height: 420, borderRadius: "50%",
             background: "radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%)",
           }} />
-          {/* Grid lines */}
           <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.035 }}>
             <defs>
               <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
@@ -46,7 +42,6 @@ export default function LoginPage() {
           </svg>
         </div>
 
-        {/* Brand */}
         <div className="relative anim-fade-up">
           <div style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center",
@@ -56,18 +51,17 @@ export default function LoginPage() {
             <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "#000" }}>S</span>
           </div>
           <p style={{ fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.5rem" }}>
-            StorePilot
+            StoreOps
           </p>
           <h1 className="font-serif" style={{ fontSize: "2.6rem", lineHeight: 1.1, fontWeight: 600, color: "var(--text-1)", maxWidth: 340 }}>
             Retail intelligence,<br />
             <span style={{ color: "var(--amber)" }}>data-backed.</span>
           </h1>
           <p style={{ marginTop: "1.25rem", color: "var(--text-2)", fontSize: "0.9rem", maxWidth: 320, lineHeight: 1.65 }}>
-            Track sales, optimize staffing, forecast inventory, and monitor efficiency — all in one dark, fast dashboard.
+            Track sales, optimize staffing, forecast inventory, and monitor efficiency — all in one fast dashboard.
           </p>
         </div>
 
-        {/* Feature list */}
         <div className="relative anim-fade-up anim-delay-2">
           {[
             ["↗", "Sales trend analytics"],
@@ -97,6 +91,9 @@ export default function LoginPage() {
 
         <div style={{ maxWidth: 360, width: "100%", margin: "0 auto" }}>
           <div style={{ marginBottom: "2.25rem" }}>
+            <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
+              ← Back
+            </Link>
             <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.5rem" }}>
               Welcome back
             </p>
@@ -110,27 +107,14 @@ export default function LoginPage() {
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.75rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 EMAIL
               </span>
-              <input
-                name="email"
-                type="email"
-                required
-                className="inp"
-                placeholder="you@store.com"
-              />
+              <input name="email" type="email" required className="inp" placeholder="you@store.com" />
             </label>
 
             <label style={{ display: "block" }}>
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.75rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 PASSWORD
               </span>
-              <input
-                name="password"
-                type="password"
-                required
-                minLength={8}
-                className="inp"
-                placeholder="At least 8 characters"
-              />
+              <input name="password" type="password" required minLength={8} className="inp" placeholder="At least 8 characters" />
             </label>
 
             {error ? <p className="alert-error">{error}</p> : null}
@@ -145,9 +129,9 @@ export default function LoginPage() {
           </form>
 
           <p style={{ marginTop: "1.5rem", fontSize: "0.82rem", color: "var(--text-3)", textAlign: "center" }}>
-            New store?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/signup" style={{ color: "var(--amber)", fontWeight: 600, textDecoration: "none" }}>
-              Create account
+              Create one free
             </Link>
           </p>
         </div>

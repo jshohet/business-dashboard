@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = getSiteUrl();
   const publicRoutes = [
     { path: "/", changeFrequency: "weekly" as const, priority: 1 },
-    { path: "/login", changeFrequency: "monthly" as const, priority: 0.8 },
+    { path: "/login", changeFrequency: "monthly" as const, priority: 0.7 },
     { path: "/signup", changeFrequency: "monthly" as const, priority: 0.8 },
     {
       path: "/privacy-notice",

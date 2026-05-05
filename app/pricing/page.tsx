@@ -62,7 +62,7 @@ export default async function PricingPage() {
             <span style={{ fontWeight: 800, fontSize: "1.3rem", color: "#000" }}>S</span>
           </div>
           <p style={{ fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.5rem" }}>
-            StorePilot
+            StoreOps
           </p>
           <h1 className="font-serif" style={{ fontSize: "2.8rem", fontWeight: 600, color: "var(--text-1)", lineHeight: 1.1 }}>
             Unlock your<br />

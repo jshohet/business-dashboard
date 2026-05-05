@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "600"],
 });
 
-const siteName = "StorePilot";
+const siteName = "StoreOps";
 const siteDescription =
   "Retail intelligence platform — sales analytics, smart scheduling, inventory forecasting, and efficiency tracking.";
 const siteUrl = getSiteUrl();

@@ -39,7 +39,7 @@ export default async function DashboardLayout({
 
   async function signOutAction() {
     "use server";
-    await signOut({ redirectTo: "/login" });
+    await signOut({ redirectTo: "/" });
   }
 
   return (
@@ -76,7 +76,7 @@ export default async function DashboardLayout({
               <p
                 className="font-serif"
                 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-1)", lineHeight: 1.1 }}>
-                StorePilot
+                StoreOps
               </p>
               <p style={{ fontSize: "0.65rem", color: "var(--text-3)", letterSpacing: "0.06em" }}>
                 {store?.name ?? session.user.email}
@@ -138,13 +138,13 @@ export default async function DashboardLayout({
             textAlign: "center",
           }}>
           <p style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>
-            You&apos;re on the free plan.{" "}
+            You&apos;re viewing example data.{" "}
             <Link
               href="/pricing"
               style={{ color: "var(--amber)", fontWeight: 600, textDecoration: "underline" }}>
               Subscribe for $5/month
             </Link>{" "}
-            to unlock full access to all modules.
+            to connect your own store and enter real data.
           </p>
         </div>
       ) : null}

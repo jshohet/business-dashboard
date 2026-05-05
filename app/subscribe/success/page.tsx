@@ -55,7 +55,7 @@ export default async function SubscribeSuccessPage() {
           <span style={{ color: "#14b8a6" }}>activated!</span>
         </h1>
         <p style={{ marginTop: "1rem", color: "var(--text-2)", fontSize: "0.88rem", lineHeight: 1.65 }}>
-          Your StorePilot Pro subscription is now active. All modules are unlocked.
+          Your StoreOps Pro subscription is now active. All modules are unlocked.
         </p>
 
         <div style={{ marginTop: "2rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
