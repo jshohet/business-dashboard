@@ -65,7 +65,7 @@ export default function LoginPage() {
         <div className="relative anim-fade-up anim-delay-2">
           {[
             ["↗", "Sales trend analytics"],
-            ["◷", "AI-powered scheduling"],
+            ["◷", "Shift scheduling"],
             ["▦", "Inventory forecasting"],
             ["◎", "Waste & efficiency alerts"],
           ].map(([icon, label]) => (

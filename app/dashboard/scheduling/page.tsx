@@ -48,9 +48,9 @@ export default async function SchedulingPage() {
 
       <section className="anim-fade-up">
         <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.4rem" }}>Module</p>
-        <h1 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: 600, color: "var(--text-1)" }}>Smart Scheduling</h1>
+        <h1 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: 600, color: "var(--text-1)" }}>Scheduling</h1>
         <p style={{ marginTop: "0.4rem", color: "var(--text-2)", fontSize: "0.88rem" }}>
-          Demand-based shift suggestions for {schedule.planningWindow.startDate} → {schedule.planningWindow.endDate}
+          Shift suggestions for {schedule.planningWindow.startDate} → {schedule.planningWindow.endDate}
         </p>
       </section>
 

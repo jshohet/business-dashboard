@@ -107,7 +107,7 @@ export default async function PricingPage() {
           <ul style={{ textAlign: "left", marginBottom: "1.75rem", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {[
               "Sales analytics with trend detection",
-              "AI-powered weekly scheduling",
+              "Weekly shift scheduling",
               "Inventory demand forecasting",
               "Waste & labor efficiency tracking",
               "Multi-tenant store isolation",

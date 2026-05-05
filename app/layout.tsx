@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const siteName = "StoreOps";
 const siteDescription =
-  "Retail intelligence platform — sales analytics, smart scheduling, inventory forecasting, and efficiency tracking.";
+  "Retail operations dashboard — sales analytics, scheduling, inventory forecasting, and efficiency tracking.";
 const siteUrl = getSiteUrl();
 const isProduction = isProductionDeployment();
 
