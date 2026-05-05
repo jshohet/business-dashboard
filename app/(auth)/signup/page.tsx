@@ -1,13 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import { signupAction } from "../auth-actions";
 
 const initialState: string | null = null;
 
 export default function SignupPage() {
   const [error, formAction, isPending] = useActionState(signupAction, initialState);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmRef = useRef<HTMLInputElement>(null);
+
+  function checkMatch() {
+    if (confirmRef.current && passwordRef.current) {
+      confirmRef.current.setCustomValidity(
+        confirmRef.current.value && confirmRef.current.value !== passwordRef.current.value
+          ? "Passwords don't match"
+          : ""
+      );
+    }
+  }
 
   return (
     <main
@@ -90,7 +102,31 @@ export default function SignupPage() {
             <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
               PASSWORD
             </span>
-            <input name="password" type="password" required minLength={8} className="inp" placeholder="At least 8 characters" />
+            <input
+              ref={passwordRef}
+              name="password"
+              type="password"
+              required
+              minLength={12}
+              className="inp"
+              placeholder="Min 12 chars, 1 number, 1 symbol"
+              onChange={checkMatch}
+            />
+          </label>
+
+          <label style={{ display: "block" }}>
+            <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
+              CONFIRM PASSWORD
+            </span>
+            <input
+              ref={confirmRef}
+              name="confirmPassword"
+              type="password"
+              required
+              className="inp"
+              placeholder="Re-enter your password"
+              onChange={checkMatch}
+            />
           </label>
 
           {error ? <p className="alert-error">{error}</p> : null}
