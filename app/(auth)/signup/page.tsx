@@ -58,7 +58,7 @@ export default function SignupPage() {
             Create your store
           </h1>
           <p style={{ marginTop: "0.4rem", color: "var(--text-3)", fontSize: "0.82rem" }}>
-            You&apos;ll see example data right away. Subscribe to start entering your own.
+            You&apos;ll see sample data to start. Subscribe whenever you&apos;re ready to use your own.
           </p>
         </div>
 

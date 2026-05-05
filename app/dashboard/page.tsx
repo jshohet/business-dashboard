@@ -8,7 +8,7 @@ const modules = [
     href: "/dashboard/analytics",
     icon: "↗",
     label: "Analytics",
-    desc: "Daily & weekly trends, peak-hour detection, momentum insights.",
+    desc: "Where your sales are up, down, and why — broken down by day and hour.",
     color: "#f59e0b",
     glow: "rgba(245,158,11,0.08)",
   },
@@ -16,7 +16,7 @@ const modules = [
     href: "/dashboard/scheduling",
     icon: "◷",
     label: "Scheduling",
-    desc: "Generate next-week staffing plans from demand and availability.",
+    desc: "See who to schedule next week based on your actual busy times.",
     color: "#14b8a6",
     glow: "rgba(20,184,166,0.08)",
   },
@@ -24,7 +24,7 @@ const modules = [
     href: "/dashboard/inventory",
     icon: "▦",
     label: "Inventory",
-    desc: "Forecast demand and recommended order quantities by product.",
+    desc: "What's running low, what to order, and how much, based on what you've sold.",
     color: "#818cf8",
     glow: "rgba(129,140,248,0.08)",
   },
@@ -32,7 +32,7 @@ const modules = [
     href: "/dashboard/efficiency",
     icon: "◎",
     label: "Efficiency",
-    desc: "Track waste and labor-to-revenue performance with smart alerts.",
+    desc: "How much you're wasting and whether your labor spend is on track.",
     color: "#f43f5e",
     glow: "rgba(244,63,94,0.08)",
   },
@@ -40,7 +40,7 @@ const modules = [
     href: "/dashboard/sales",
     icon: "+",
     label: "Sales Entry",
-    desc: "Capture hourly sales to power analytics and scheduling.",
+    desc: "Log your hourly sales. Everything else pulls from this.",
     color: "#9ca3af",
     glow: "rgba(156,163,175,0.06)",
   },
@@ -48,7 +48,7 @@ const modules = [
     href: "/dashboard/employees",
     icon: "◯",
     label: "Team",
-    desc: "Manage employees and availability for roster generation.",
+    desc: "Add your staff and mark when they can work.",
     color: "#9ca3af",
     glow: "rgba(156,163,175,0.06)",
   },
@@ -86,7 +86,7 @@ export default async function DashboardPage() {
           Overview
         </h1>
         <p style={{ marginTop: "0.5rem", color: "var(--text-2)", fontSize: "0.88rem" }}>
-          Your store at a glance. Use each module to track, optimize, and forecast.
+          Everything&apos;s here. Pick where you want to start.
         </p>
       </section>
 
@@ -111,7 +111,7 @@ export default async function DashboardPage() {
       {/* Module grid */}
       <section>
         <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "1rem" }}>
-          Modules
+          Sections
         </p>
         <div style={{ display: "grid", gap: "0.875rem", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}>
           {modules.map((mod, i) => (

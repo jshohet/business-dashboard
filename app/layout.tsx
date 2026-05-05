@@ -83,6 +83,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full`}>
       <body className="min-h-screen flex flex-col">
         {GA_ID ? (

@@ -79,7 +79,7 @@ export default async function Home() {
             <span style={{ color: "var(--amber)" }}>finally making sense.</span>
           </h1>
           <p style={{ color: "var(--text-2)", fontSize: "1rem", lineHeight: 1.7, maxWidth: 520, margin: "0 auto 2.5rem" }}>
-            Sales analytics, smart scheduling, inventory forecasting, and efficiency tracking — built for independent retail stores.
+            Know when you&apos;re busiest, who to schedule, what to reorder, and where you&apos;re losing money. Built for independent stores.
           </p>
 
           <div style={{ display: "flex", gap: "0.875rem", justifyContent: "center", flexWrap: "wrap", marginBottom: "1.25rem" }}>
@@ -100,8 +100,8 @@ export default async function Home() {
           </div>
 
           <p style={{ fontSize: "0.78rem", color: "var(--text-3)" }}>
-            Free accounts see example data to explore the platform.{" "}
-            <span style={{ color: "var(--text-2)" }}>Subscribe for $5/month to connect your real store.</span>
+            Sign up free to explore with sample data.{" "}
+            <span style={{ color: "var(--text-2)" }}>$5/month to connect your actual store.</span>
           </p>
         </div>
       </section>
@@ -113,7 +113,7 @@ export default async function Home() {
             What&apos;s included
           </p>
           <h2 className="font-serif" style={{ fontSize: "2rem", fontWeight: 600, color: "var(--text-1)", textAlign: "center", marginBottom: "2.5rem" }}>
-            Every tool your store needs
+            What&apos;s in here
           </h2>
           <div style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}>
             {features.map((f, i) => (
@@ -166,7 +166,7 @@ export default async function Home() {
               $5<span style={{ fontSize: "1rem", color: "var(--text-3)", fontFamily: "var(--font-dm-sans)" }}>/month</span>
             </p>
             <p style={{ color: "var(--text-2)", fontSize: "0.85rem", margin: "1rem 0 1.5rem" }}>
-              Enter your real store data, unlock all modules, and keep your free account forever.
+              Connect your store, enter your real numbers, and cancel any time.
             </p>
             <Link href="/signup" className="btn-primary" style={{ display: "inline-block", padding: "0.8rem 2rem" }}>
               Get started →
@@ -185,7 +185,7 @@ export default async function Home() {
             Suggest a feature
           </h2>
           <p style={{ color: "var(--text-2)", fontSize: "0.85rem", textAlign: "center", marginBottom: "1.75rem" }}>
-            Have an idea? We read every submission and build what stores actually need.
+            Have an idea? We look at everything that comes in.
           </p>
           <FeatureSuggestionForm />
         </div>

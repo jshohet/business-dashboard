@@ -138,13 +138,13 @@ export default async function DashboardLayout({
             textAlign: "center",
           }}>
           <p style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>
-            You&apos;re viewing example data.{" "}
+            This is sample data.{" "}
             <Link
               href="/pricing"
               style={{ color: "var(--amber)", fontWeight: 600, textDecoration: "underline" }}>
               Subscribe for $5/month
             </Link>{" "}
-            to connect your own store and enter real data.
+            to switch to your store&apos;s real numbers.
           </p>
         </div>
       ) : null}
