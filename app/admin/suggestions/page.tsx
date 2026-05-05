@@ -1,16 +1,14 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
-export default async function SuggestionsPage() {
-  const session = await auth();
+export default async function SuggestionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ key?: string }>;
+}) {
+  const { key } = await searchParams;
 
-  const superuserEmails = (process.env.SUPERUSER_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-
-  if (!session?.user || !superuserEmails.includes((session.user.email ?? "").toLowerCase())) {
+  if (!key || key !== process.env.AUTH_SECRET) {
     redirect("/");
   }
 
