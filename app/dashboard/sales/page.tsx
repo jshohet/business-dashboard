@@ -5,90 +5,59 @@ import { createSalesEntryAction } from "../actions";
 
 const initialState: string | null = null;
 
+const labelStyle = {
+  display: "block" as const,
+  marginBottom: "0.4rem",
+  fontSize: "0.72rem",
+  letterSpacing: "0.08em",
+  color: "var(--text-3)",
+  fontWeight: 500,
+};
+
 export default function SalesPage() {
-  const [error, formAction, isPending] = useActionState(
-    createSalesEntryAction,
-    initialState,
-  );
+  const [error, formAction, isPending] = useActionState(createSalesEntryAction, initialState);
 
   return (
-    <div className="space-y-6">
-      <section>
-        <h1 className="text-3xl font-black text-slate-900">Sales Entry</h1>
-        <p className="mt-2 text-slate-700">
-          Add daily or hourly sales manually for initial trend tracking.
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+
+      <section className="anim-fade-up">
+        <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.4rem" }}>Module</p>
+        <h1 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: 600, color: "var(--text-1)" }}>Sales Entry</h1>
+        <p style={{ marginTop: "0.4rem", color: "var(--text-2)", fontSize: "0.88rem" }}>
+          Log hourly sales manually to power analytics and scheduling.
         </p>
       </section>
 
-      <section className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-        <form action={formAction} className="grid gap-4 md:grid-cols-2">
-          <label className="block">
-            <span className="mb-1 block text-sm font-medium text-slate-700">
-              Date
-            </span>
-            <input
-              type="date"
-              name="date"
-              required
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-orange-400"
-            />
+      <article className="card-static anim-fade-up anim-delay-1" style={{ padding: "1.75rem", maxWidth: 600 }}>
+        <form action={formAction} style={{ display: "grid", gap: "1.125rem", gridTemplateColumns: "1fr 1fr" }}>
+          <label style={{ display: "block" }}>
+            <span style={labelStyle}>DATE</span>
+            <input type="date" name="date" required className="inp" />
+          </label>
+          <label style={{ display: "block" }}>
+            <span style={labelStyle}>HOUR (0–23)</span>
+            <input type="number" name="hour" min={0} max={23} required className="inp" placeholder="14" />
+          </label>
+          <label style={{ display: "block" }}>
+            <span style={labelStyle}>REVENUE ($)</span>
+            <input type="number" name="revenue" min={0} step="0.01" required className="inp" placeholder="0.00" />
+          </label>
+          <label style={{ display: "block" }}>
+            <span style={labelStyle}>TRANSACTIONS</span>
+            <input type="number" name="transactions" min={0} defaultValue={0} className="inp" />
           </label>
 
-          <label className="block">
-            <span className="mb-1 block text-sm font-medium text-slate-700">
-              Hour (0-23)
-            </span>
-            <input
-              type="number"
-              name="hour"
-              min={0}
-              max={23}
-              required
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-orange-400"
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-1 block text-sm font-medium text-slate-700">
-              Revenue
-            </span>
-            <input
-              type="number"
-              name="revenue"
-              min={0}
-              step="0.01"
-              required
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-orange-400"
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-1 block text-sm font-medium text-slate-700">
-              Transactions
-            </span>
-            <input
-              type="number"
-              name="transactions"
-              min={0}
-              defaultValue={0}
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-orange-400"
-            />
-          </label>
-
-          {error ? (
-            <p className="md:col-span-2 rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {error}
-            </p>
-          ) : null}
+          {error ? <p className="alert-error" style={{ gridColumn: "span 2" }}>{error}</p> : null}
 
           <button
             type="submit"
             disabled={isPending}
-            className="md:col-span-2 rounded-xl bg-slate-900 px-4 py-3 font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-70">
-            {isPending ? "Saving..." : "Save sales entry"}
+            className="btn-primary"
+            style={{ gridColumn: "span 2", width: "100%", padding: "0.875rem" }}>
+            {isPending ? "Saving…" : "Save Sales Entry"}
           </button>
         </form>
-      </section>
+      </article>
     </div>
   );
 }

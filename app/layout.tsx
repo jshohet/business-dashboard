@@ -1,25 +1,35 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
+import { Fraunces, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { legalFooterLinks, legalOperatorName } from "@/lib/legal";
 import { getSiteUrl, isProductionDeployment } from "@/lib/site";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["opsz"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jb-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
-const siteName = "Business Dashboard";
+const siteName = "StorePilot";
 const siteDescription =
-  "Store operations dashboard with sales, staffing, forecasting, and efficiency tools.";
+  "Retail intelligence platform — sales analytics, smart scheduling, inventory forecasting, and efficiency tracking.";
 const siteUrl = getSiteUrl();
 const isProduction = isProductionDeployment();
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -29,9 +39,7 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   applicationName: siteName,
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: "/",
@@ -64,32 +72,52 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f97316",
+  themeColor: "#f59e0b",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const currentYear = new Date().getFullYear();
 
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      className={`${fraunces.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full`}>
       <body className="min-h-screen flex flex-col">
+        {GA_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+            </Script>
+          </>
+        ) : null}
+
         <div className="flex-1">{children}</div>
-        <footer className="border-t border-slate-200 bg-white/90 px-4 py-6 text-sm text-slate-600 backdrop-blur sm:px-6">
+
+        <footer
+          style={{
+            borderTop: "1px solid var(--border)",
+            background: "var(--bg-raised)",
+          }}
+          className="px-4 py-5 text-xs sm:px-6">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-center md:flex-row md:text-left">
-            <p>{`Copyright ${currentYear} ${legalOperatorName}`}</p>
+            <p style={{ color: "var(--text-3)" }}>
+              &copy; {currentYear}{" "}
+              <span style={{ color: "var(--text-2)" }}>{legalOperatorName}</span>
+            </p>
             <nav aria-label="Legal links">
-              <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+              <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
                 {legalFooterLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="underline decoration-slate-300 underline-offset-4 transition hover:text-slate-900 hover:decoration-slate-500">
+                      style={{ color: "var(--text-3)" }}
+                      className="transition hover:opacity-80 underline underline-offset-3">
                       {link.label}
                     </Link>
                   </li>

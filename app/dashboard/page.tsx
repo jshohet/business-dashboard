@@ -3,115 +3,148 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/currency";
 
+const modules = [
+  {
+    href: "/dashboard/analytics",
+    icon: "↗",
+    label: "Analytics",
+    desc: "Daily & weekly trends, peak-hour detection, momentum insights.",
+    color: "#f59e0b",
+    glow: "rgba(245,158,11,0.08)",
+  },
+  {
+    href: "/dashboard/scheduling",
+    icon: "◷",
+    label: "Scheduling",
+    desc: "Generate next-week staffing plans from demand and availability.",
+    color: "#14b8a6",
+    glow: "rgba(20,184,166,0.08)",
+  },
+  {
+    href: "/dashboard/inventory",
+    icon: "▦",
+    label: "Inventory",
+    desc: "Forecast demand and recommended order quantities by product.",
+    color: "#818cf8",
+    glow: "rgba(129,140,248,0.08)",
+  },
+  {
+    href: "/dashboard/efficiency",
+    icon: "◎",
+    label: "Efficiency",
+    desc: "Track waste and labor-to-revenue performance with smart alerts.",
+    color: "#f43f5e",
+    glow: "rgba(244,63,94,0.08)",
+  },
+  {
+    href: "/dashboard/sales",
+    icon: "+",
+    label: "Sales Entry",
+    desc: "Capture hourly sales to power analytics and scheduling.",
+    color: "#9ca3af",
+    glow: "rgba(156,163,175,0.06)",
+  },
+  {
+    href: "/dashboard/employees",
+    icon: "◯",
+    label: "Team",
+    desc: "Manage employees and availability for roster generation.",
+    color: "#9ca3af",
+    glow: "rgba(156,163,175,0.06)",
+  },
+] as const;
+
 export default async function DashboardPage() {
   const session = await auth();
   const storeId = session?.user?.storeId;
 
-  if (!storeId) {
-    return null;
-  }
+  if (!storeId) return null;
 
   const [salesCount, totalRevenueAgg, employeeCount] = await Promise.all([
     prisma.salesEntry.count({ where: { storeId } }),
-    prisma.salesEntry.aggregate({
-      where: { storeId },
-      _sum: { revenue: true },
-    }),
+    prisma.salesEntry.aggregate({ where: { storeId }, _sum: { revenue: true } }),
     prisma.employee.count({ where: { storeId } }),
   ]);
 
   const totalRevenue = Number(totalRevenueAgg._sum.revenue ?? 0);
 
+  const metrics = [
+    { label: "Total Revenue", value: formatCurrency(totalRevenue), color: "var(--amber)" },
+    { label: "Sales Entries",  value: String(salesCount),          color: "var(--text-1)" },
+    { label: "Employees",      value: String(employeeCount),        color: "var(--text-1)" },
+  ];
+
   return (
-    <div className="space-y-6">
-      <section>
-        <h1 className="text-3xl font-black text-slate-900">
-          Dashboard Overview
+    <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+
+      {/* Heading */}
+      <section className="anim-fade-up">
+        <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.4rem" }}>
+          Dashboard
+        </p>
+        <h1 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: 600, color: "var(--text-1)", lineHeight: 1.1 }}>
+          Overview
         </h1>
-        <p className="mt-2 text-slate-700">
-          All core phases are implemented. Use each module to track sales,
-          optimize staffing, forecast inventory, and monitor efficiency.
+        <p style={{ marginTop: "0.5rem", color: "var(--text-2)", fontSize: "0.88rem" }}>
+          Your store at a glance. Use each module to track, optimize, and forecast.
         </p>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3">
-        <article className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm text-slate-600">Total Revenue Logged</p>
-          <p className="mt-2 text-3xl font-black">
-            {formatCurrency(totalRevenue)}
-          </p>
-        </article>
-        <article className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm text-slate-600">Sales Entries</p>
-          <p className="mt-2 text-3xl font-black">{salesCount}</p>
-        </article>
-        <article className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm text-slate-600">Employees</p>
-          <p className="mt-2 text-3xl font-black">{employeeCount}</p>
-        </article>
+      {/* Metric cards */}
+      <section
+        style={{ display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+        {metrics.map((m, i) => (
+          <article
+            key={m.label}
+            className={`card-static anim-fade-up anim-delay-${i + 1}`}
+            style={{ padding: "1.5rem" }}>
+            <p className="metric-label">{m.label}</p>
+            <p
+              className="metric-value"
+              style={{ marginTop: "0.6rem", color: m.color }}>
+              {m.value}
+            </p>
+          </article>
+        ))}
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Link
-          href="/dashboard/analytics"
-          className="rounded-2xl border border-orange-200 bg-orange-50 p-5 transition hover:bg-orange-100">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-orange-700">
-            Analytics
-          </p>
-          <p className="mt-2 text-slate-800">
-            Daily and weekly trends, peak-hour detection, momentum insights.
-          </p>
-        </Link>
-        <Link
-          href="/dashboard/scheduling"
-          className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 transition hover:bg-emerald-100">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-emerald-700">
-            Scheduling
-          </p>
-          <p className="mt-2 text-slate-800">
-            Generate next-week staffing plans from demand and availability.
-          </p>
-        </Link>
-        <Link
-          href="/dashboard/inventory"
-          className="rounded-2xl border border-sky-200 bg-sky-50 p-5 transition hover:bg-sky-100">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-sky-700">
-            Inventory
-          </p>
-          <p className="mt-2 text-slate-800">
-            Forecast demand and recommended order quantities by product.
-          </p>
-        </Link>
-        <Link
-          href="/dashboard/efficiency"
-          className="rounded-2xl border border-rose-200 bg-rose-50 p-5 transition hover:bg-rose-100">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-rose-700">
-            Efficiency
-          </p>
-          <p className="mt-2 text-slate-800">
-            Track waste and labor-to-revenue performance with alerts.
-          </p>
-        </Link>
-        <Link
-          href="/dashboard/sales"
-          className="rounded-2xl border border-slate-200 bg-white p-5 transition hover:bg-slate-50">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-700">
-            Sales Input
-          </p>
-          <p className="mt-2 text-slate-800">
-            Capture sales by day/hour to power analytics and scheduling.
-          </p>
-        </Link>
-        <Link
-          href="/dashboard/employees"
-          className="rounded-2xl border border-slate-200 bg-white p-5 transition hover:bg-slate-50">
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-700">
-            Team Input
-          </p>
-          <p className="mt-2 text-slate-800">
-            Maintain employees and availability for roster generation.
-          </p>
-        </Link>
+      {/* Module grid */}
+      <section>
+        <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "1rem" }}>
+          Modules
+        </p>
+        <div style={{ display: "grid", gap: "0.875rem", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}>
+          {modules.map((mod, i) => (
+            <Link
+              key={mod.href}
+              href={mod.href}
+              className={`card anim-fade-up anim-delay-${Math.min(i + 1, 6)}`}
+              style={{
+                padding: "1.25rem 1.375rem",
+                textDecoration: "none",
+                display: "block",
+                background: `linear-gradient(135deg, ${mod.glow} 0%, var(--bg-raised) 60%)`,
+              }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.625rem", marginBottom: "0.625rem" }}>
+                <span style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  width: 32, height: 32, borderRadius: 8,
+                  background: `${mod.glow}`,
+                  border: `1px solid ${mod.color}22`,
+                  color: mod.color, fontSize: "0.9rem", fontWeight: 700,
+                }}>
+                  {mod.icon}
+                </span>
+                <span style={{ fontWeight: 600, color: "var(--text-1)", fontSize: "0.9rem" }}>
+                  {mod.label}
+                </span>
+              </div>
+              <p style={{ color: "var(--text-2)", fontSize: "0.8rem", lineHeight: 1.55 }}>
+                {mod.desc}
+              </p>
+            </Link>
+          ))}
+        </div>
       </section>
     </div>
   );

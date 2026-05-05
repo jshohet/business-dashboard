@@ -7,79 +7,31 @@ import { prisma } from "@/lib/prisma";
 export default async function EfficiencyPage() {
   const session = await auth();
   const storeId = session?.user?.storeId;
-
-  if (!storeId) {
-    return null;
-  }
+  if (!storeId) return null;
 
   const since = subDays(new Date(), 120);
 
   const [inventoryRows, laborRows, salesRows] = await Promise.all([
-    prisma.inventoryLog.findMany({
-      where: {
-        storeId,
-        date: { gte: since },
-      },
-      select: {
-        product: true,
-        date: true,
-        orderedQty: true,
-        soldQty: true,
-        wasteQty: true,
-      },
-    }),
-    prisma.laborEntry.findMany({
-      where: {
-        storeId,
-        date: { gte: since },
-      },
-      select: {
-        date: true,
-        laborCost: true,
-      },
-    }),
-    prisma.salesEntry.findMany({
-      where: {
-        storeId,
-        date: { gte: since },
-      },
-      select: {
-        date: true,
-        revenue: true,
-      },
-    }),
+    prisma.inventoryLog.findMany({ where: { storeId, date: { gte: since } }, select: { product: true, date: true, orderedQty: true, soldQty: true, wasteQty: true } }),
+    prisma.laborEntry.findMany({ where: { storeId, date: { gte: since } }, select: { date: true, laborCost: true } }),
+    prisma.salesEntry.findMany({ where: { storeId, date: { gte: since } }, select: { date: true, revenue: true } }),
   ]);
 
   const insights = buildEfficiencyInsights(
-    inventoryRows.map((row: (typeof inventoryRows)[number]) => ({
-      product: row.product,
-      date: row.date,
-      orderedQty: row.orderedQty,
-      soldQty: row.soldQty,
-      wasteQty: row.wasteQty,
-    })),
-    laborRows.map((row: (typeof laborRows)[number]) => ({
-      date: row.date,
-      laborCost: Number(row.laborCost),
-    })),
-    salesRows.map((row: (typeof salesRows)[number]) => ({
-      date: row.date,
-      revenue: Number(row.revenue),
-    })),
+    inventoryRows.map((r: (typeof inventoryRows)[number]) => ({ product: r.product, date: r.date, orderedQty: r.orderedQty, soldQty: r.soldQty, wasteQty: r.wasteQty })),
+    laborRows.map((r: (typeof laborRows)[number]) => ({ date: r.date, laborCost: Number(r.laborCost) })),
+    salesRows.map((r: (typeof salesRows)[number]) => ({ date: r.date, revenue: Number(r.revenue) })),
   );
 
   return (
-    <div className="space-y-6">
-      <section>
-        <h1 className="text-3xl font-black text-slate-900">
-          Waste & Efficiency Tracker
-        </h1>
-        <p className="mt-2 text-slate-700">
-          Track waste percentage, labor cost versus revenue, and operational
-          alerts to improve profitability.
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+      <section className="anim-fade-up">
+        <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.4rem" }}>Module</p>
+        <h1 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: 600, color: "var(--text-1)" }}>Waste &amp; Efficiency</h1>
+        <p style={{ marginTop: "0.4rem", color: "var(--text-2)", fontSize: "0.88rem" }}>
+          Track waste percentage, labor-to-revenue ratios, and operational alerts.
         </p>
       </section>
-
       <EfficiencyUI insights={insights} />
     </div>
   );

@@ -7,48 +7,34 @@ import { prisma } from "@/lib/prisma";
 export default async function AnalyticsPage() {
   const session = await auth();
   const storeId = session?.user?.storeId;
-
-  if (!storeId) {
-    return null;
-  }
+  if (!storeId) return null;
 
   const fromDate = subDays(new Date(), 89);
-
   const salesEntries = await prisma.salesEntry.findMany({
-    where: {
-      storeId,
-      date: {
-        gte: fromDate,
-      },
-    },
-    select: {
-      date: true,
-      hour: true,
-      revenue: true,
-      transactions: true,
-    },
+    where: { storeId, date: { gte: fromDate } },
+    select: { date: true, hour: true, revenue: true, transactions: true },
     orderBy: [{ date: "asc" }, { hour: "asc" }],
   });
 
   const analytics = buildAnalytics(
-    salesEntries.map((entry: (typeof salesEntries)[number]) => ({
-      date: entry.date,
-      hour: entry.hour,
-      revenue: Number(entry.revenue),
-      transactions: entry.transactions,
+    salesEntries.map((e: (typeof salesEntries)[number]) => ({
+      date: e.date, hour: e.hour, revenue: Number(e.revenue), transactions: e.transactions,
     })),
   );
 
   return (
-    <div className="space-y-6">
-      <section>
-        <h1 className="text-3xl font-black text-slate-900">Sales Analytics</h1>
-        <p className="mt-2 text-slate-700">
-          Phase 2 active: daily and weekly trend visualization, peak-hour
-          detection, and momentum analysis.
+    <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+      <section className="anim-fade-up">
+        <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.4rem" }}>
+          Module
+        </p>
+        <h1 className="font-serif" style={{ fontSize: "2.2rem", fontWeight: 600, color: "var(--text-1)" }}>
+          Sales Analytics
+        </h1>
+        <p style={{ marginTop: "0.4rem", color: "var(--text-2)", fontSize: "0.88rem" }}>
+          Daily &amp; weekly trends, peak-hour detection, momentum analysis over 90 days.
         </p>
       </section>
-
       <AnalyticsCharts data={analytics} />
     </div>
   );

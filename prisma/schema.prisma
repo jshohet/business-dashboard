@@ -12,16 +12,20 @@ datasource db {
 }
 
 model Store {
-  id            String                 @id @default(cuid())
-  name          String
-  timezone      String                 @default("UTC")
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime               @updatedAt
-  users         User[]
-  employees     Employee[]
-  salesEntries  SalesEntry[]
-  inventoryLogs InventoryLog[]
-  laborEntries  LaborEntry[]
+  id                     String                 @id @default(cuid())
+  name                   String
+  timezone               String                 @default("UTC")
+  stripeCustomerId       String?                @unique
+  stripeSubscriptionId   String?                @unique
+  subscriptionStatus     String                 @default("inactive")
+  subscriptionPeriodEnd  DateTime?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  users                  User[]
+  employees              Employee[]
+  salesEntries           SalesEntry[]
+  inventoryLogs          InventoryLog[]
+  laborEntries           LaborEntry[]
 
   @@index([name])
 }
