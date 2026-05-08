@@ -4,10 +4,10 @@ import { auth } from "@/auth";
 import FeatureSuggestionForm from "./feature-suggestion-form";
 
 const features = [
-  { icon: "↗", label: "Sales Analytics", desc: "Daily & weekly trends, peak-hour detection, and revenue momentum at a glance.", color: "#f59e0b", glow: "rgba(245,158,11,0.08)" },
-  { icon: "◷", label: "Scheduling", desc: "Plan next week's shifts based on your sales history and who's available.", color: "#14b8a6", glow: "rgba(20,184,166,0.08)" },
-  { icon: "▦", label: "Inventory Forecasting", desc: "Forecast demand and recommended order quantities by product, week over week.", color: "#818cf8", glow: "rgba(129,140,248,0.08)" },
-  { icon: "◎", label: "Efficiency Tracking", desc: "Track waste and labor-to-revenue ratio with alerts when things go off-track.", color: "#f43f5e", glow: "rgba(244,63,94,0.08)" },
+  { icon: "↗", label: "Sales Analytics", desc: "See daily and weekly trends, when you're busiest, and whether this week beat last.", color: "#f59e0b", glow: "rgba(245,158,11,0.08)" },
+  { icon: "◷", label: "Scheduling", desc: "Plan next week's shifts from your actual sales data — no guessing at who to call in.", color: "#14b8a6", glow: "rgba(20,184,166,0.08)" },
+  { icon: "▦", label: "Inventory Forecasting", desc: "See what to reorder and how much, based on what sold and what went to waste.", color: "#818cf8", glow: "rgba(129,140,248,0.08)" },
+  { icon: "◎", label: "Efficiency Tracking", desc: "Track waste rates and labor costs with alerts when the numbers start to slip.", color: "#f43f5e", glow: "rgba(244,63,94,0.08)" },
 ];
 
 export default async function Home() {
@@ -18,7 +18,7 @@ export default async function Home() {
     <main style={{ background: "var(--bg)", minHeight: "100svh" }}>
 
       {/* ── Nav ── */}
-      <nav style={{
+      <nav aria-label="Main navigation" style={{
         borderBottom: "1px solid var(--border)",
         background: "rgba(11,12,15,0.9)",
         backdropFilter: "blur(12px)",
@@ -179,13 +179,13 @@ export default async function Home() {
       <section style={{ padding: "4rem 1.5rem 5rem", borderTop: "1px solid var(--border-subtle)" }}>
         <div className="mx-auto max-w-lg anim-fade-up">
           <p style={{ fontSize: "0.68rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.5rem", textAlign: "center" }}>
-            Shape the roadmap
+            What should we build next?
           </p>
           <h2 className="font-serif" style={{ fontSize: "1.8rem", fontWeight: 600, color: "var(--text-1)", textAlign: "center", marginBottom: "0.5rem" }}>
             Suggest a feature
           </h2>
           <p style={{ color: "var(--text-2)", fontSize: "0.85rem", textAlign: "center", marginBottom: "1.75rem" }}>
-            Have an idea? We look at everything that comes in.
+            Have an idea? We read everything that comes in.
           </p>
           <FeatureSuggestionForm />
         </div>

@@ -65,11 +65,11 @@ export default async function PricingPage() {
             StoreOps
           </p>
           <h1 className="font-serif" style={{ fontSize: "2.8rem", fontWeight: 600, color: "var(--text-1)", lineHeight: 1.1 }}>
-            Unlock your<br />
-            <span style={{ color: "var(--amber)" }}>full dashboard</span>
+            Connect your<br />
+            <span style={{ color: "var(--amber)" }}>real numbers</span>
           </h1>
           <p style={{ marginTop: "1rem", color: "var(--text-2)", fontSize: "0.9rem", lineHeight: 1.6 }}>
-            One flat price. All modules. Cancel any time.
+            $5/month for everything. No tiers, no usage limits. Cancel any time.
           </p>
         </div>
 
@@ -109,9 +109,9 @@ export default async function PricingPage() {
               "Sales analytics with trend detection",
               "Weekly shift scheduling",
               "Inventory demand forecasting",
-              "Waste & labor efficiency tracking",
-              "Multi-tenant store isolation",
-              "Unlimited data entries",
+              "Waste and labor efficiency tracking",
+              "Your data stays private to your store",
+              "Unlimited sales, inventory, and labor entries",
             ].map((feat) => (
               <li key={feat} style={{ display: "flex", alignItems: "center", gap: "0.625rem", fontSize: "0.85rem", color: "var(--text-2)" }}>
                 <span style={{ color: "#14b8a6", fontSize: "0.75rem" }}>✓</span>

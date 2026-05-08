@@ -19,6 +19,8 @@ export default function FeatureSuggestionForm() {
       <input
         name="email"
         type="email"
+        aria-label="Your email address (optional)"
+        autoComplete="email"
         placeholder="your@email.com (optional)"
         className="inp"
       />
@@ -26,7 +28,8 @@ export default function FeatureSuggestionForm() {
         name="message"
         required
         minLength={10}
-        placeholder="What would make this more useful for your store?"
+        aria-label="Feature suggestion"
+        placeholder="What's missing? What would you actually use?"
         className="inp"
         style={{ minHeight: 96, resize: "vertical" }}
       />

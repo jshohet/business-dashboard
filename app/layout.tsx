@@ -47,9 +47,10 @@ export const metadata: Metadata = {
     description: siteDescription,
     siteName,
     locale: "en_US",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: siteName }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteName,
     description: siteDescription,
   },
@@ -86,6 +87,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full`}>
       <body className="min-h-screen flex flex-col">
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         {GA_ID ? (
           <>
             <Script
@@ -98,7 +100,7 @@ export default function RootLayout({
           </>
         ) : null}
 
-        <div className="flex-1">{children}</div>
+        <div id="main-content" className="flex-1">{children}</div>
 
         <footer
           style={{

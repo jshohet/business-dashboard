@@ -54,7 +54,7 @@ export default function SignupPage() {
         className="anim-fade-up">
 
         <div style={{ marginBottom: "2rem" }}>
-          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
+          <Link href="/" aria-label="Back to home" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
             ← Back
           </Link>
           <div style={{
@@ -80,14 +80,14 @@ export default function SignupPage() {
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 YOUR NAME
               </span>
-              <input name="name" type="text" required className="inp" placeholder="Alex" />
+              <input name="name" type="text" required autoComplete="name" className="inp" placeholder="Alex" />
             </label>
 
             <label style={{ display: "block" }}>
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 STORE NAME
               </span>
-              <input name="storeName" type="text" required className="inp" placeholder="Downtown Café" />
+              <input name="storeName" type="text" required autoComplete="organization" className="inp" placeholder="Downtown Café" />
             </label>
           </div>
 
@@ -95,7 +95,7 @@ export default function SignupPage() {
             <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
               EMAIL
             </span>
-            <input name="email" type="email" required className="inp" placeholder="you@store.com" />
+            <input name="email" type="email" required autoComplete="email" className="inp" placeholder="you@store.com" />
           </label>
 
           <label style={{ display: "block" }}>
@@ -108,6 +108,7 @@ export default function SignupPage() {
               type="password"
               required
               minLength={12}
+              autoComplete="new-password"
               className="inp"
               placeholder="Min 12 chars, 1 number, 1 symbol"
               onChange={checkMatch}
@@ -123,6 +124,7 @@ export default function SignupPage() {
               name="confirmPassword"
               type="password"
               required
+              autoComplete="new-password"
               className="inp"
               placeholder="Re-enter your password"
               onChange={checkMatch}

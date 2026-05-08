@@ -53,12 +53,12 @@ export default function LoginPage() {
           <p style={{ fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.5rem" }}>
             StoreOps
           </p>
-          <h1 className="font-serif" style={{ fontSize: "2.6rem", lineHeight: 1.1, fontWeight: 600, color: "var(--text-1)", maxWidth: 340 }}>
-            Retail intelligence,<br />
-            <span style={{ color: "var(--amber)" }}>data-backed.</span>
-          </h1>
+          <p className="font-serif" style={{ fontSize: "2.6rem", lineHeight: 1.1, fontWeight: 600, color: "var(--text-1)", maxWidth: 340 }}>
+            Run your store on<br />
+            <span style={{ color: "var(--amber)" }}>real numbers.</span>
+          </p>
           <p style={{ marginTop: "1.25rem", color: "var(--text-2)", fontSize: "0.9rem", maxWidth: 320, lineHeight: 1.65 }}>
-            Track sales, optimize staffing, forecast inventory, and monitor efficiency — all in one fast dashboard.
+            Sales trends, scheduling, inventory forecasts, waste tracking. One place, no spreadsheets.
           </p>
         </div>
 
@@ -91,15 +91,15 @@ export default function LoginPage() {
 
         <div style={{ maxWidth: 360, width: "100%", margin: "0 auto" }}>
           <div style={{ marginBottom: "2.25rem" }}>
-            <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
+            <Link href="/" aria-label="Back to home" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", color: "var(--text-3)", fontSize: "0.78rem", textDecoration: "none", marginBottom: "1.5rem" }}>
               ← Back
             </Link>
             <p style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.5rem" }}>
               Welcome back
             </p>
-            <h2 className="font-serif" style={{ fontSize: "1.9rem", fontWeight: 600, color: "var(--text-1)" }}>
+            <h1 className="font-serif" style={{ fontSize: "1.9rem", fontWeight: 600, color: "var(--text-1)" }}>
               Sign in
-            </h2>
+            </h1>
           </div>
 
           <form action={formAction} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -107,14 +107,14 @@ export default function LoginPage() {
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.75rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 EMAIL
               </span>
-              <input name="email" type="email" required className="inp" placeholder="you@store.com" />
+              <input name="email" type="email" required autoComplete="email" className="inp" placeholder="you@store.com" />
             </label>
 
             <label style={{ display: "block" }}>
               <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.75rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
                 PASSWORD
               </span>
-              <input name="password" type="password" required minLength={8} className="inp" placeholder="At least 8 characters" />
+              <input name="password" type="password" required minLength={8} autoComplete="current-password" className="inp" placeholder="At least 8 characters" />
             </label>
 
             {error ? <p className="alert-error">{error}</p> : null}

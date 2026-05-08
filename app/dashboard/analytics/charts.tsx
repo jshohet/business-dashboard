@@ -59,7 +59,7 @@ export default function AnalyticsCharts({ data }: Props) {
         <article className="card-static anim-fade-up anim-delay-2" style={{ padding: "1.5rem" }}>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-1)", marginBottom: "0.25rem" }}>Daily Revenue</h2>
           <p style={{ fontSize: "0.75rem", color: "var(--text-3)", marginBottom: "1.25rem" }}>Day-by-day sales momentum</p>
-          <div style={{ height: 260 }}>
+          <div role="img" aria-label="Line chart showing daily revenue" style={{ height: 260 }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.dailyRevenue} margin={{ top: 8, right: 8, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
@@ -75,7 +75,7 @@ export default function AnalyticsCharts({ data }: Props) {
         <article className="card-static anim-fade-up anim-delay-3" style={{ padding: "1.5rem" }}>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-1)", marginBottom: "0.25rem" }}>Weekly Revenue</h2>
           <p style={{ fontSize: "0.75rem", color: "var(--text-3)", marginBottom: "1.25rem" }}>Week-on-week comparison</p>
-          <div style={{ height: 260 }}>
+          <div role="img" aria-label="Bar chart showing weekly revenue" style={{ height: 260 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.weeklyRevenue} margin={{ top: 8, right: 8, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
@@ -94,7 +94,7 @@ export default function AnalyticsCharts({ data }: Props) {
         <article className="card-static anim-fade-up anim-delay-4" style={{ padding: "1.5rem" }}>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text-1)", marginBottom: "0.25rem" }}>Revenue by Hour</h2>
           <p style={{ fontSize: "0.75rem", color: "var(--text-3)", marginBottom: "1.25rem" }}>Peak trading hours</p>
-          <div style={{ height: 260 }}>
+          <div role="img" aria-label="Bar chart showing revenue by hour of day" style={{ height: 260 }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.hourlyRevenue} margin={{ top: 8, right: 8, bottom: 4, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />

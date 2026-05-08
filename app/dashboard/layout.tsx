@@ -85,7 +85,7 @@ export default async function DashboardLayout({
           </div>
 
           {/* Nav */}
-          <nav className="flex items-center gap-0.5 overflow-x-auto pb-0">
+          <nav aria-label="Dashboard navigation" className="flex items-center gap-0.5 overflow-x-auto pb-0">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="nav-link">
                 <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>{item.icon}</span>
@@ -149,7 +149,7 @@ export default async function DashboardLayout({
         </div>
       ) : null}
 
-      <main className="mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 sm:py-9">
+      <main id="main-content" className="mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 sm:py-9">
         {children}
       </main>
     </div>

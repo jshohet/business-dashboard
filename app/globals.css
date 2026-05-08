@@ -28,6 +28,25 @@
   --font-mono:         var(--font-jb-mono);
 }
 
+/* ── Skip link ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background: var(--amber);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 0 0 8px 0;
+  transition: top 0.1s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 /* ── Base ── */
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -123,7 +142,11 @@ body::before {
 .inp::placeholder { color: var(--text-3); }
 .inp:focus {
   border-color: var(--amber-dim);
-  box-shadow: 0 0 0 3px var(--amber-glow);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+.inp:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
 }
 .inp[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5);
@@ -162,6 +185,10 @@ select.inp {
   transform: translateY(-1px);
 }
 .btn-primary:active  { transform: translateY(0); }
+.btn-primary:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
 .btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -187,6 +214,10 @@ select.inp {
   border-color: var(--amber-dim);
   color: var(--amber);
   background: var(--amber-glow);
+}
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
 }
 
 /* ── Tables ── */
@@ -258,6 +289,10 @@ select.inp {
   white-space: nowrap;
 }
 .nav-link:hover  { color: var(--text-1); background: var(--bg-elevated); }
+.nav-link:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
 .nav-link.active {
   color: var(--amber);
   background: var(--amber-glow);
