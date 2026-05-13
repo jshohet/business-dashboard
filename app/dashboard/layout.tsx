@@ -2,16 +2,18 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { getPlanLabel } from "@/lib/plan-features";
 
 const navItems = [
-  { href: "/dashboard",            label: "Overview",   icon: "◈" },
-  { href: "/dashboard/analytics",  label: "Analytics",  icon: "↗" },
-  { href: "/dashboard/scheduling", label: "Scheduling", icon: "◷" },
-  { href: "/dashboard/inventory",  label: "Inventory",  icon: "▦" },
-  { href: "/dashboard/efficiency", label: "Efficiency", icon: "◎" },
-  { href: "/dashboard/sales",      label: "Sales",      icon: "+" },
-  { href: "/dashboard/employees",  label: "Team",       icon: "◯" },
+  { href: "/dashboard",           label: "Dashboard" },
+  { href: "/dashboard/locations", label: "Locations" },
+  { href: "/dashboard/kpi",       label: "KPI Entry" },
+  { href: "/dashboard/reports",   label: "AI Reports" },
+  { href: "/dashboard/ordering",  label: "Ordering" },
+  { href: "/dashboard/settings",  label: "Settings" },
 ];
+
+const ACTIVE_STATUSES = new Set(["active", "trialing", "past_due"]);
 
 export default async function DashboardLayout({
   children,
@@ -32,10 +34,19 @@ export default async function DashboardLayout({
 
   const store = await prisma.store.findUnique({
     where: { id: session.user.storeId as string },
-    select: { id: true, name: true, subscriptionStatus: true },
+    select: { id: true, name: true, plan: true, subscriptionStatus: true, subscriptionPeriodEnd: true },
   });
 
-  const isSubscribed = isSuperuser || store?.subscriptionStatus === "active";
+  const isActive = isSuperuser || ACTIVE_STATUSES.has(store?.subscriptionStatus ?? "");
+  const isTrialing = store?.subscriptionStatus === "trialing";
+  const planLabel = isSuperuser ? "Admin" : getPlanLabel(store?.plan ?? "starter");
+
+  // Days remaining in trial
+  let trialDaysLeft: number | null = null;
+  if (isTrialing && store?.subscriptionPeriodEnd) {
+    const diff = store.subscriptionPeriodEnd.getTime() - Date.now();
+    trialDaysLeft = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  }
 
   async function signOutAction() {
     "use server";
@@ -44,7 +55,6 @@ export default async function DashboardLayout({
 
   return (
     <div style={{ minHeight: "100svh", background: "var(--bg)" }}>
-      {/* Header */}
       <header
         style={{
           borderBottom: "1px solid var(--border)",
@@ -54,7 +64,6 @@ export default async function DashboardLayout({
           top: 0,
           zIndex: 40,
         }}>
-        {/* Amber accent bar */}
         <div className="amber-bar" />
 
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -85,25 +94,29 @@ export default async function DashboardLayout({
           </div>
 
           {/* Nav */}
-          <nav aria-label="Dashboard navigation" className="flex items-center gap-0.5 overflow-x-auto pb-0">
+          <nav aria-label="Dashboard navigation" className="flex items-center gap-0.5 overflow-x-auto">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="nav-link">
-                <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>{item.icon}</span>
                 {item.label}
               </Link>
             ))}
+            {isSuperuser && (
+              <Link href="/dashboard/admin/waitlist" className="nav-link" style={{ color: "var(--amber)" }}>
+                Waitlist
+              </Link>
+            )}
           </nav>
 
           {/* Right side */}
           <div className="flex items-center gap-2 shrink-0">
-            {isSubscribed ? (
+            {isActive ? (
               <span className="badge-active hidden sm:inline-flex">
                 <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#14b8a6", display: "inline-block" }} />
-                {isSuperuser ? "Admin" : "Pro"}
+                {planLabel}
               </span>
             ) : (
               <Link
-                href="/pricing"
+                href="/dashboard/settings/billing"
                 style={{
                   fontSize: "0.72rem",
                   fontWeight: 700,
@@ -116,7 +129,7 @@ export default async function DashboardLayout({
                   textDecoration: "none",
                   whiteSpace: "nowrap",
                 }}>
-                Upgrade $5/mo
+                Upgrade →
               </Link>
             )}
             <form action={signOutAction}>
@@ -128,8 +141,28 @@ export default async function DashboardLayout({
         </div>
       </header>
 
-      {/* Paywall gate */}
-      {!isSubscribed ? (
+      {/* Trial countdown banner */}
+      {isTrialing && trialDaysLeft !== null && (
+        <div
+          style={{
+            background: "linear-gradient(135deg, rgba(245,158,11,0.06) 0%, transparent 60%)",
+            borderBottom: "1px solid rgba(245,158,11,0.15)",
+            padding: "0.6rem 1.5rem",
+            textAlign: "center",
+          }}>
+          <p style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>
+            {trialDaysLeft > 0
+              ? <>Trial ends in <strong style={{ color: "var(--amber)" }}>{trialDaysLeft} day{trialDaysLeft !== 1 ? "s" : ""}</strong>. {" "}</>
+              : <>Your trial ends today. {" "}</>}
+            <Link href="/dashboard/settings/billing" style={{ color: "var(--amber)", fontWeight: 600, textDecoration: "underline" }}>
+              Add a payment method
+            </Link>
+          </p>
+        </div>
+      )}
+
+      {/* No subscription banner */}
+      {!isActive && !isTrialing && (
         <div
           style={{
             background: "linear-gradient(135deg, rgba(245,158,11,0.06) 0%, transparent 60%)",
@@ -138,16 +171,15 @@ export default async function DashboardLayout({
             textAlign: "center",
           }}>
           <p style={{ fontSize: "0.82rem", color: "var(--text-2)" }}>
-            This is sample data.{" "}
             <Link
-              href="/pricing"
+              href="/dashboard/settings/billing"
               style={{ color: "var(--amber)", fontWeight: 600, textDecoration: "underline" }}>
-              Subscribe for $5/month
-            </Link>{" "}
-            to switch to your store&apos;s real numbers.
+              Choose a plan
+            </Link>
+            {" "}to unlock KPI tracking, AI drift analysis, and ordering recommendations.
           </p>
         </div>
-      ) : null}
+      )}
 
       <main id="main-content" className="mx-auto w-full max-w-7xl px-4 py-7 sm:px-6 sm:py-9">
         {children}

@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,21 +6,24 @@ datasource db {
   provider = "postgresql"
 }
 
+// Store = the account/org. One per signup. Owns the Stripe subscription and plan.
 model Store {
-  id                     String                 @id @default(cuid())
-  name                   String
-  timezone               String                 @default("UTC")
-  stripeCustomerId       String?                @unique
-  stripeSubscriptionId   String?                @unique
-  subscriptionStatus     String                 @default("inactive")
-  subscriptionPeriodEnd  DateTime?
-  createdAt              DateTime               @default(now())
-  updatedAt              DateTime               @updatedAt
-  users                  User[]
-  employees              Employee[]
-  salesEntries           SalesEntry[]
-  inventoryLogs          InventoryLog[]
-  laborEntries           LaborEntry[]
+  id                    String              @id @default(cuid())
+  name                  String
+  timezone              String              @default("UTC")
+  plan                  String              @default("starter") // "starter" | "operator" | "enterprise"
+  stripeCustomerId      String?             @unique
+  stripeSubscriptionId  String?             @unique
+  subscriptionStatus    String              @default("inactive") // raw Stripe status
+  subscriptionPeriodEnd DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  users                 User[]
+  locations             Location[]
+  employees             Employee[]
+  salesEntries          SalesEntry[]
+  inventoryLogs         InventoryLog[]
+  laborEntries          LaborEntry[]
 
   @@index([name])
 }
@@ -43,16 +41,91 @@ model User {
   @@index([storeId])
 }
 
+// Location = an individual store the account manages. Limited by plan tier.
+model Location {
+  id                String            @id @default(cuid())
+  storeId           String
+  name              String
+  type              String            @default("other") // "QSR" | "franchise" | "retail" | "other"
+  // Flexible per-location metric definitions — allows custom field names/labels
+  metricDefinitions Json              @default("[]")
+  deletedAt         DateTime?         // soft delete — never hard-delete locations
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  store             Store             @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  kpiEntries        KpiEntry[]
+  orderingCadences  OrderingCadence[]
+  aiReports         AiReport[]
+
+  @@index([storeId])
+  @@index([storeId, deletedAt])
+}
+
+// Weekly KPI snapshot entered by the manager. The metrics field is flexible JSON
+// so we can add/remove KPIs without schema changes.
+model KpiEntry {
+  id         String   @id @default(cuid())
+  locationId String
+  weekEnding DateTime // always a Sunday — the end of the reporting week
+  // e.g. { "labor_cost_pct": 28.4, "waste_pct": 4.1, "speed_of_service_avg": 142 }
+  metrics    Json
+  notes      String?
+  createdAt  DateTime @default(now())
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, weekEnding])
+  @@index([locationId, weekEnding])
+}
+
+// AI-generated ordering recommendations per product per location.
+model OrderingCadence {
+  id                String   @id @default(cuid())
+  locationId        String
+  productName       String
+  dayOfWeek         Int?     // 0–6 (Sun–Sat), null = applies to all days
+  recommendedQty    Decimal? @db.Decimal(10, 2)
+  aiReasoning       String?
+  generatedAt       DateTime @default(now())
+  location          Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@index([locationId])
+}
+
+// Every AI call result is saved here for audit, debugging, and in-app history.
+model AiReport {
+  id            String   @id @default(cuid())
+  locationId    String
+  reportType    String   // "drift_analysis" | "weekly_ops" | "coaching_script" | "ordering"
+  content       String   // the full Claude response (parsed JSON stored as string)
+  inputSnapshot Json?    // what was sent to Claude — useful for debugging
+  createdAt     DateTime @default(now())
+  location      Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@index([locationId, reportType])
+  @@index([locationId, createdAt])
+}
+
+// Waitlist signups from storeops-waitlist.html
+model Waitlist {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  firstName  String?
+  role       String?
+  storeCount String?
+  painPoint  String?
+  createdAt  DateTime @default(now())
+}
+
 model Employee {
-  id            String                 @id @default(cuid())
-  storeId       String
-  name          String
-  role          String
-  hourlyRate    Decimal                @db.Decimal(10, 2)
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime               @updatedAt
-  store         Store                  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  availability  EmployeeAvailability[]
+  id           String                 @id @default(cuid())
+  storeId      String
+  name         String
+  role         String
+  hourlyRate   Decimal                @db.Decimal(10, 2)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  store        Store                  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  availability EmployeeAvailability[]
 
   @@index([storeId])
 }

@@ -1,11 +1,12 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import AuthError from "next-auth";
+import { AuthError } from "next-auth";
 import { z } from "zod";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { seedDemoData } from "@/lib/seed-demo-data";
+import { sendWelcomeEmail } from "@/lib/email";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -62,10 +63,21 @@ export async function signupAction(
           passwordHash,
         },
       },
+      // Create the first Location from the store name — the account starts with one location.
+      // Additional locations can be added from the dashboard (subject to plan limits).
+      locations: {
+        create: {
+          name: parsed.data.storeName,
+          type: "other",
+        },
+      },
     },
   });
 
   await seedDemoData(store.id);
+
+  // Fire-and-forget — don't let email failure block signup
+  sendWelcomeEmail(parsed.data.email, parsed.data.name).catch(() => {});
 
   try {
     await signIn("credentials", {

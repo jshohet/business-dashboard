@@ -1,8 +1,19 @@
 import { NextRequest } from "next/server";
+import { z } from "zod";
 import { auth } from "@/auth";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
 import { getSiteUrl } from "@/lib/site";
+
+const PRICE_MAP: Record<string, string | undefined> = {
+  starter:    process.env.STRIPE_PRICE_STARTER,
+  operator:   process.env.STRIPE_PRICE_OPERATOR,
+  enterprise: process.env.STRIPE_PRICE_ENTERPRISE,
+};
+
+const schema = z.object({
+  plan: z.enum(["starter", "operator", "enterprise"]),
+});
 
 export async function POST(request: NextRequest) {
   const session = await auth();
@@ -11,19 +22,19 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json().catch(() => ({}));
-  const { storeId } = body as { storeId?: string };
-
-  if (!storeId) {
-    return Response.json({ error: "storeId required" }, { status: 400 });
+  const parsed = schema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json({ error: parsed.error.issues[0]?.message }, { status: 400 });
   }
 
-  const priceId = process.env.STRIPE_PRICE_ID;
-  if (!priceId) {
-    return Response.json({ error: "Stripe price not configured" }, { status: 500 });
+  const { plan } = parsed.data;
+  const priceId = PRICE_MAP[plan];
+  if (!priceId || priceId.startsWith("price_") === false || priceId.includes("placeholder")) {
+    return Response.json({ error: `Stripe price for ${plan} plan is not configured` }, { status: 500 });
   }
 
   const store = await prisma.store.findFirst({
-    where: { id: storeId, users: { some: { id: session.user.id } } },
+    where: { id: session.user.storeId as string, users: { some: { id: session.user.id } } },
     select: { id: true, name: true, stripeCustomerId: true },
   });
 
@@ -52,9 +63,13 @@ export async function POST(request: NextRequest) {
     payment_method_types: ["card"],
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
-    success_url: `${baseUrl}/subscribe/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${baseUrl}/pricing`,
-    metadata: { storeId: store.id },
+    subscription_data: {
+      trial_period_days: 14,
+      metadata: { storeId: store.id, plan },
+    },
+    success_url: `${baseUrl}/dashboard/settings/billing?checkout=success`,
+    cancel_url: `${baseUrl}/dashboard/settings/billing`,
+    metadata: { storeId: store.id, plan },
   });
 
   return Response.json({ url: checkoutSession.url });

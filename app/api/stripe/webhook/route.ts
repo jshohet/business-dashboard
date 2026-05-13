@@ -5,6 +5,16 @@ import type Stripe from "stripe";
 
 export const runtime = "nodejs";
 
+// Maps Stripe price IDs to plan tiers. Returns null if unrecognized.
+function planFromPriceId(priceId: string): string | null {
+  const map: Record<string, string> = {
+    [process.env.STRIPE_PRICE_STARTER ?? ""]:    "starter",
+    [process.env.STRIPE_PRICE_OPERATOR ?? ""]:   "operator",
+    [process.env.STRIPE_PRICE_ENTERPRISE ?? ""]: "enterprise",
+  };
+  return map[priceId] ?? null;
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const signature = request.headers.get("stripe-signature");
@@ -28,15 +38,20 @@ export async function POST(request: NextRequest) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       const storeId = session.metadata?.storeId;
-      const subscriptionId = session.subscription as string;
+      const plan = session.metadata?.plan;
+      const subscriptionId = session.subscription as string | null;
+
       if (storeId && subscriptionId) {
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         await prisma.store.update({
           where: { id: storeId },
           data: {
             stripeSubscriptionId: subscriptionId,
-            subscriptionStatus: subscription.status === "active" ? "active" : "inactive",
+            // Store the raw Stripe status — don't map to active/inactive
+            subscriptionStatus: subscription.status,
             subscriptionPeriodEnd: new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000),
+            // Set plan from checkout metadata (most reliable source)
+            ...(plan ? { plan } : {}),
           },
         });
       }
@@ -50,17 +65,23 @@ export async function POST(request: NextRequest) {
         select: { id: true },
       });
       if (store) {
+        // Map price ID → plan for upgrades/downgrades via customer portal
+        const priceId = subscription.items.data[0]?.price.id;
+        const plan = priceId ? planFromPriceId(priceId) : null;
+
         await prisma.store.update({
           where: { id: store.id },
           data: {
-            subscriptionStatus: subscription.status === "active" ? "active" : "inactive",
+            subscriptionStatus: subscription.status,
             subscriptionPeriodEnd: new Date((subscription as unknown as { current_period_end: number }).current_period_end * 1000),
+            ...(plan ? { plan } : {}),
           },
         });
       }
       break;
     }
 
+    // Only downgrade the account plan when the subscription is fully deleted
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription;
       const store = await prisma.store.findFirst({
@@ -70,7 +91,10 @@ export async function POST(request: NextRequest) {
       if (store) {
         await prisma.store.update({
           where: { id: store.id },
-          data: { subscriptionStatus: "inactive" },
+          data: {
+            subscriptionStatus: subscription.status,
+            plan: "starter",
+          },
         });
       }
       break;
