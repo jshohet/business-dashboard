@@ -2,20 +2,20 @@
 
 /* ── Carbon & Amber design system ── */
 :root {
-  --bg:            #0b0c0f;
-  --bg-raised:     #111318;
-  --bg-elevated:   #181b23;
-  --border:        #23262f;
-  --border-subtle: #1a1d25;
-  --amber:         #f59e0b;
-  --amber-dim:     #b97a08;
-  --amber-glow:    rgba(245, 158, 11, 0.12);
-  --amber-glow-lg: rgba(245, 158, 11, 0.07);
+  --bg:            #0d0f12;
+  --bg-raised:     #131720;
+  --bg-elevated:   #1a1f2e;
+  --border:        #222740;
+  --border-subtle: #191d2e;
+  --amber:         #38bdf8;
+  --amber-dim:     #0ea5e9;
+  --amber-glow:    rgba(56, 189, 248, 0.12);
+  --amber-glow-lg: rgba(56, 189, 248, 0.06);
   --teal:          #14b8a6;
   --rose:          #f43f5e;
-  --text-1:        #f0ede8;
-  --text-2:        #9295a0;
-  --text-3:        #8a8d98;
+  --text-1:        #eef0f4;
+  --text-2:        #8e93a6;
+  --text-3:        #636879;
   --radius-card:   16px;
   --radius-input:  10px;
 }
@@ -61,16 +61,6 @@ body {
   min-height: 100svh;
 }
 
-/* Grain texture overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.028;
-  pointer-events: none;
-  z-index: 9999;
-}
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar              { width: 6px; height: 6px; }
@@ -91,8 +81,8 @@ body::before {
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 .card:hover {
-  border-color: rgba(245, 158, 11, 0.25);
-  box-shadow: 0 0 0 1px rgba(245,158,11,0.08), 0 8px 32px rgba(0,0,0,0.4);
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 0 1px rgba(56,189,248,0.08), 0 8px 32px rgba(0,0,0,0.4);
   transform: translateY(-1px);
 }
 .card-static {
@@ -180,8 +170,8 @@ select.inp {
   transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
 }
 .btn-primary:hover {
-  background: #fbbf24;
-  box-shadow: 0 0 20px rgba(245,158,11,0.3);
+  background: #7dd3fc;
+  box-shadow: 0 0 20px rgba(56,189,248,0.25);
   transform: translateY(-1px);
 }
 .btn-primary:active  { transform: translateY(0); }

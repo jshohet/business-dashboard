@@ -99,8 +99,11 @@ export default function SignupPage() {
           </label>
 
           <label style={{ display: "block" }}>
-            <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
+            <span style={{ display: "block", marginBottom: "0.25rem", fontSize: "0.72rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
               PASSWORD
+            </span>
+            <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.71rem", color: "var(--text-3)" }}>
+              Min 12 characters · 1 number · 1 symbol
             </span>
             <input
               ref={passwordRef}
@@ -110,7 +113,7 @@ export default function SignupPage() {
               minLength={12}
               autoComplete="new-password"
               className="inp"
-              placeholder="Min 12 chars, 1 number, 1 symbol"
+              placeholder=""
               onChange={checkMatch}
             />
           </label>

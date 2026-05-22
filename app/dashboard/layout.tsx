@@ -110,10 +110,17 @@ export default async function DashboardLayout({
           {/* Right side */}
           <div className="flex items-center gap-2 shrink-0">
             {isActive ? (
+              isSuperuser ? (
+                <Link href="/dashboard/admin/waitlist" className="badge-active hidden sm:inline-flex" style={{ textDecoration: "none" }}>
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#14b8a6", display: "inline-block" }} />
+                  {planLabel}
+                </Link>
+              ) : (
               <span className="badge-active hidden sm:inline-flex">
                 <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#14b8a6", display: "inline-block" }} />
                 {planLabel}
               </span>
+              )
             ) : (
               <Link
                 href="/dashboard/settings/billing"

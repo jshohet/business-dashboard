@@ -101,7 +101,7 @@ export default async function Home() {
 
           <p style={{ fontSize: "0.78rem", color: "var(--text-3)" }}>
             Sign up free to explore with sample data.{" "}
-            <span style={{ color: "var(--text-2)" }}>$5/month to connect your actual store.</span>
+            <span style={{ color: "var(--text-2)" }}>Plans start at $49/mo.</span>
           </p>
         </div>
       </section>
@@ -152,26 +152,27 @@ export default async function Home() {
           <h2 className="font-serif" style={{ fontSize: "1.8rem", fontWeight: 600, color: "var(--text-1)", marginBottom: "0.75rem" }}>
             Simple pricing
           </h2>
-          <div style={{
-            background: "var(--bg-raised)",
-            border: "1px solid rgba(245,158,11,0.2)",
-            borderRadius: 16,
-            padding: "2rem",
-            marginTop: "1.5rem",
-          }}>
-            <p style={{ fontSize: "0.68rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--amber)", marginBottom: "0.5rem" }}>
-              Pro
-            </p>
-            <p className="font-serif" style={{ fontSize: "2.8rem", fontWeight: 600, color: "var(--text-1)", lineHeight: 1 }}>
-              $5<span style={{ fontSize: "1rem", color: "var(--text-3)", fontFamily: "var(--font-dm-sans)" }}>/month</span>
-            </p>
-            <p style={{ color: "var(--text-2)", fontSize: "0.85rem", margin: "1rem 0 1.5rem" }}>
-              Connect your store, enter your real numbers, and cancel any time.
-            </p>
-            <Link href="/signup" className="btn-primary" style={{ display: "inline-block", padding: "0.8rem 2rem" }}>
-              Get started →
-            </Link>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginTop: "1.5rem", textAlign: "left" }}>
+            {[
+              { label: "Starter", price: "$49/mo", detail: "1 location · KPI dashboard" },
+              { label: "Operator", price: "$99/mo", detail: "5 locations · AI drift analysis" },
+              { label: "Enterprise", price: "$299/mo", detail: "50 locations · Full AI suite" },
+            ].map((tier) => (
+              <div key={tier.label} style={{
+                background: "var(--bg-raised)",
+                border: "1px solid var(--border)",
+                borderRadius: 12,
+                padding: "1.25rem",
+              }}>
+                <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: "0.4rem" }}>{tier.label}</p>
+                <p className="font-serif" style={{ fontSize: "1.6rem", fontWeight: 600, color: "var(--text-1)", lineHeight: 1, marginBottom: "0.4rem" }}>{tier.price}</p>
+                <p style={{ fontSize: "0.75rem", color: "var(--text-2)" }}>{tier.detail}</p>
+              </div>
+            ))}
           </div>
+          <Link href="/signup" className="btn-primary" style={{ display: "inline-block", padding: "0.8rem 2rem", marginTop: "1.5rem" }}>
+            Get started free →
+          </Link>
         </div>
       </section>
 

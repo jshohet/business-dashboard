@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 const PLANS = [
   {
@@ -34,7 +33,6 @@ interface BillingActionsProps {
 }
 
 export function BillingActions({ currentPlan, subscriptionStatus, hasStripeCustomer }: BillingActionsProps) {
-  const router = useRouter();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [loadingPortal, setLoadingPortal] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +50,7 @@ export function BillingActions({ currentPlan, subscriptionStatus, hasStripeCusto
     const data = await res.json();
     setLoadingPlan(null);
     if (!res.ok) { setError(data.error ?? "Something went wrong"); return; }
-    router.push(data.url);
+    window.location.href = data.url;
   }
 
   async function handleManageBilling() {
@@ -62,7 +60,7 @@ export function BillingActions({ currentPlan, subscriptionStatus, hasStripeCusto
     const data = await res.json();
     setLoadingPortal(false);
     if (!res.ok) { setError(data.error ?? "Something went wrong"); return; }
-    router.push(data.url);
+    window.location.href = data.url;
   }
 
   return (

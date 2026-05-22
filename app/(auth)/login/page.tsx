@@ -111,10 +111,14 @@ export default function LoginPage() {
             </label>
 
             <label style={{ display: "block" }}>
-              <span style={{ display: "block", marginBottom: "0.4rem", fontSize: "0.75rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>
-                PASSWORD
+              <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
+                <span style={{ fontSize: "0.75rem", letterSpacing: "0.08em", color: "var(--text-3)", fontWeight: 500 }}>PASSWORD</span>
+                <Link href="/forgot-password" style={{ fontSize: "0.72rem", color: "var(--text-3)", textDecoration: "none" }}
+                  tabIndex={0}>
+                  Forgot password?
+                </Link>
               </span>
-              <input name="password" type="password" required minLength={8} autoComplete="current-password" className="inp" placeholder="At least 8 characters" />
+              <input name="password" type="password" required minLength={8} autoComplete="current-password" className="inp" placeholder="" />
             </label>
 
             {error ? <p className="alert-error">{error}</p> : null}

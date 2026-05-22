@@ -60,6 +60,48 @@ export async function sendWaitlistConfirmationEmail(
   });
 }
 
+export async function sendPasswordResetEmail(
+  to: string,
+  resetUrl: string,
+): Promise<void> {
+  const resend = getResend();
+  if (!resend) return;
+
+  await resend.emails.send({
+    from: FROM_ADDRESS,
+    to,
+    subject: "Reset your StoreOps password",
+    text: [
+      "You requested a password reset for your StoreOps account.",
+      "",
+      "Click the link below to set a new password. This link expires in 1 hour.",
+      "",
+      resetUrl,
+      "",
+      "If you didn't request this, you can ignore this email — your password won't change.",
+    ].join("\n"),
+  });
+}
+
+export async function sendFeatureSuggestionNotification(
+  submission: { email?: string | null; message: string }
+): Promise<void> {
+  const resend = getResend();
+  if (!resend || !OWNER_EMAIL) return;
+
+  await resend.emails.send({
+    from: FROM_ADDRESS,
+    to: OWNER_EMAIL,
+    subject: "New feature suggestion",
+    text: [
+      "New feature suggestion",
+      "",
+      `From:    ${submission.email ?? "anonymous"}`,
+      `Message: ${submission.message}`,
+    ].join("\n"),
+  });
+}
+
 export async function sendWaitlistOwnerNotification(
   submission: {
     email: string;

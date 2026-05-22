@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { sendFeatureSuggestionNotification } from "@/lib/email";
 
 const schema = z.object({
   email: z.union([z.string().email(), z.literal("")]).optional(),
@@ -26,6 +27,11 @@ export async function suggestFeatureAction(
       email: parsed.data.email || null,
       message: parsed.data.message,
     },
+  });
+
+  await sendFeatureSuggestionNotification({
+    email: parsed.data.email || null,
+    message: parsed.data.message,
   });
 
   return "success";
